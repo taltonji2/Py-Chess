@@ -3,5 +3,8 @@ from coordinate import Coordinate
 
 class piece(ABC):
     @abstractmethod
+    def move(self, ):
+        pass
+
     def move(self):
         pass
