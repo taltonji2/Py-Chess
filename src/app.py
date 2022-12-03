@@ -3,17 +3,17 @@ from pieces import rook, king, knight, pawn, queen, bishop
 import re
 
 active_player = ''
-game_board_index = [[0 for x in range(8)] for y in range(8)]
+game_board_color_index = [[0 for x in range(8)] for y in range(8)]
 game_board = [[0 for x in range(8)] for y in range(8)]
 
-def create_game_board_index():
+def create_game_board_color_index():
     whiteturn = True
     for y in range(8):
         for x in range(8): 
             if whiteturn:
-                game_board_index[x][y] = 'white'
+                game_board_color_index[x][y] = 'white'
             else:
-                game_board_index[x][y] = 'black'
+                game_board_color_index[x][y] = 'black'
             
         whiteturn = not whiteturn
         x = 0
@@ -61,6 +61,26 @@ def create_game_board():
             if x == 7 and y ==7:
                 game_board[x][y] = knight('black', Coordinate(x,y))
 
+
+def print_game_board():
+    i = 0
+    c = 65
+    for y in range(8):
+        print('\n')
+        print( f"{8+i} ", end=' ')
+        for x in range(8):
+            if game_board[x][y] != 0: 
+                print(f"{game_board[x][y].letter} ", end=' ')
+            else: 
+                print(f".", end='  ')
+
+        i-=1
+    
+    print("\n   ", end='')
+    for i in range(8):
+        print(f"{chr(c+i).lower()}", end='  ')
+            
+
 def start_prompt():
     print("White or black? ")
     active_player = input()
@@ -73,7 +93,8 @@ def start_prompt():
 
 def start():
     start_prompt()
-    create_game_board_index()
+    create_game_board_color_index()
     create_game_board()
+    print_game_board()
 
 start()

@@ -1,5 +1,9 @@
+# class piece():
+
+
 class pawn():
     name = 'pawn'
+    letter = 'p'
 
     def __init__(self, color, coordinate) -> None:
         self.color = color
@@ -11,6 +15,7 @@ class pawn():
 
 class knight():
     name = 'knight'
+    letter = 'k'
 
     def __init__(self, color, coordinate) -> None:
         self.color = color
@@ -22,6 +27,7 @@ class knight():
 
 class rook():
     name = 'rook'
+    letter = 'r'
 
     def __init__(self, color, coordinate) -> None:
         self.color = color
@@ -33,6 +39,7 @@ class rook():
 
 class bishop():
     name = 'bishop'
+    letter = 'b'
 
     def __init__(self, color, coordinate) -> None:
         self.color = color
@@ -44,6 +51,7 @@ class bishop():
 
 class king():
     name = 'king'
+    letter = 'K'
 
     def __init__(self, color, coordinate) -> None:
         self.color = color
@@ -55,6 +63,7 @@ class king():
 
 class queen():
     name = 'queen'
+    letter = 'q'
 
     def __init__(self, color, coordinate) -> None:
         self.color = color
