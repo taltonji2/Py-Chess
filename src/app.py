@@ -24,9 +24,9 @@ def create_game_board():
             if y == 1: 
                 game_board[x][y] = pawn('white', Coordinate(x,y))
             if x == 0 and y ==0:
-                game_board[x][y] = knight('white', Coordinate(x,y))
-            if x == 1 and y ==0:
                 game_board[x][y] = rook('white', Coordinate(x,y))
+            if x == 1 and y ==0:
+                game_board[x][y] = knight('white', Coordinate(x,y))
             if x == 2 and y ==0:
                 game_board[x][y] = bishop('white', Coordinate(x,y))
             if x == 3 and y ==0:
@@ -36,18 +36,18 @@ def create_game_board():
             if x == 5 and y ==0:
                 game_board[x][y] = bishop('white', Coordinate(x,y))
             if x == 6 and y ==0:
-                game_board[x][y] = rook('white', Coordinate(x,y))
-            if x == 7 and y ==0:
                 game_board[x][y] = knight('white', Coordinate(x,y))
+            if x == 7 and y ==0:
+                game_board[x][y] = rook('white', Coordinate(x,y))
     
     for y in range(6,8):
         for x in range(8):
             if y == 6: 
                 game_board[x][y] = pawn('black', Coordinate(x,y))
             if x == 0 and y ==7:
-                game_board[x][y] = knight('black', Coordinate(x,y))
-            if x == 1 and y ==7:
                 game_board[x][y] = rook('black', Coordinate(x,y))
+            if x == 1 and y ==7:
+                game_board[x][y] = knight('black', Coordinate(x,y))
             if x == 2 and y ==7:
                 game_board[x][y] = bishop('black', Coordinate(x,y))
             if x == 3 and y ==7:
@@ -57,9 +57,9 @@ def create_game_board():
             if x == 5 and y ==7:
                 game_board[x][y] = bishop('black', Coordinate(x,y))
             if x == 6 and y ==7:
-                game_board[x][y] = rook('black', Coordinate(x,y))
-            if x == 7 and y ==7:
                 game_board[x][y] = knight('black', Coordinate(x,y))
+            if x == 7 and y ==7:
+                game_board[x][y] = rook('black', Coordinate(x,y))
 
 
 def print_game_board():
