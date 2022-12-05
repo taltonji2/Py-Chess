@@ -26,7 +26,7 @@ def print_game_board():
 def start_prompt():
     print("White or black? ")
     active_player = input()
-    pattern = "[WwHhIiTtEe]|[BbLlAaCcKk]"
+    pattern = "white| White | black | Black"
     if re.search(pattern, active_player):
         print(active_player.lower()+"\'s move")
     else:
@@ -34,14 +34,15 @@ def start_prompt():
         start_prompt()
 
 # Here
-def check_move_input(str):
-    print("what will it be? ")
-    pattern = "[AaBbCcDdEeFfGgHh]&[12345678]"
-    if re.search(pattern, str):
-        print(str)
+def check_move_input():
+    move = input()
+    pattern = "([a-h][1-8]\s[a-h][1-8])"
+    if re.search(pattern, move):
+        print(move)
+        return
     else:
         print("invalid selection.")
-    check_move_input()
+        check_move_input()
 
 def translate_move(input:str):
     #8   . . . . . . . .
@@ -53,17 +54,14 @@ def translate_move(input:str):
     #2   . . . . . . . .
     #1   . . . . . . . .
     #    a b c d e f g h
-    
     input.lower()
 
 def game_loop():
     print_game_board()
     while gb.active_player != None:
-        print(f'{gb.active_player}\'s move: ')
-        move = input()
-        # if input invalid throw error
-        # try catch the situation
-        print(move)
+        print(f'\n{gb.active_player}\'s move: ')
+        print("what will it be? ")
+        check_move_input()
         if(gb.active_player == 'white'):
             gb.active_player = 'black'
         else:
