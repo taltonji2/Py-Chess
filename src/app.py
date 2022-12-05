@@ -1,66 +1,9 @@
 from coordinate import Coordinate
-from pieces import rook, king, knight, pawn, queen, bishop
+from game_board import Game_board
 import re
 
-active_player = ''
-game_board_color_index = [[0 for x in range(8)] for y in range(8)]
-game_board = [[0 for x in range(8)] for y in range(8)]
-
-def create_game_board_color_index():
-    whiteturn = True
-    for y in range(8):
-        for x in range(8): 
-            if whiteturn:
-                game_board_color_index[x][y] = 'white'
-            else:
-                game_board_color_index[x][y] = 'black'
-            
-        whiteturn = not whiteturn
-        x = 0
-        
-def create_game_board():
-    for y in range(2):
-        for x in range(8):
-            if y == 1: 
-                game_board[x][y] = pawn('white', Coordinate(x,y))
-            if x == 0 and y ==0:
-                game_board[x][y] = rook('white', Coordinate(x,y))
-            if x == 1 and y ==0:
-                game_board[x][y] = knight('white', Coordinate(x,y))
-            if x == 2 and y ==0:
-                game_board[x][y] = bishop('white', Coordinate(x,y))
-            if x == 3 and y ==0:
-                game_board[x][y] = queen('white', Coordinate(x,y))
-            if x == 4 and y ==0:
-                game_board[x][y] = king('white', Coordinate(x,y))
-            if x == 5 and y ==0:
-                game_board[x][y] = bishop('white', Coordinate(x,y))
-            if x == 6 and y ==0:
-                game_board[x][y] = knight('white', Coordinate(x,y))
-            if x == 7 and y ==0:
-                game_board[x][y] = rook('white', Coordinate(x,y))
-    
-    for y in range(6,8):
-        for x in range(8):
-            if y == 6: 
-                game_board[x][y] = pawn('black', Coordinate(x,y))
-            if x == 0 and y ==7:
-                game_board[x][y] = rook('black', Coordinate(x,y))
-            if x == 1 and y ==7:
-                game_board[x][y] = knight('black', Coordinate(x,y))
-            if x == 2 and y ==7:
-                game_board[x][y] = bishop('black', Coordinate(x,y))
-            if x == 3 and y ==7:
-                game_board[x][y] = queen('black', Coordinate(x,y))
-            if x == 4 and y ==7:
-                game_board[x][y] = king('black', Coordinate(x,y))
-            if x == 5 and y ==7:
-                game_board[x][y] = bishop('black', Coordinate(x,y))
-            if x == 6 and y ==7:
-                game_board[x][y] = knight('black', Coordinate(x,y))
-            if x == 7 and y ==7:
-                game_board[x][y] = rook('black', Coordinate(x,y))
-
+gb = Game_board()
+board = gb.board
 
 def print_game_board():
     i = 0
@@ -69,13 +12,12 @@ def print_game_board():
         print('\n')
         print( f"{8+i} ", end=' ')
         for x in range(8):
-            if game_board[x][y] != 0: 
-                print(f"{game_board[x][y].letter} ", end=' ')
+            if board[x][y] != 0: 
+                print(f"{board[x][y].letter} ", end=' ')
             else: 
                 print(f".", end='  ')
 
         i-=1
-    
     print("\n   ", end='')
     for i in range(8):
         print(f"{chr(c+i).lower()}", end='  ')
@@ -91,10 +33,46 @@ def start_prompt():
         print("please make a valid selection.")
         start_prompt()
 
+# Here
+def check_move_input(str):
+    print("what will it be? ")
+    pattern = "[AaBbCcDdEeFfGgHh]&[12345678]"
+    if re.search(pattern, str):
+        print(str)
+    else:
+        print("invalid selection.")
+    check_move_input()
+
+def translate_move(input:str):
+    #8   . . . . . . . .
+    #7   . . . . . . . .
+    #6   . . . . . . . .
+    #5   . . . . . . . .
+    #4   . . . . . . . .
+    #3   . . . . . . . .
+    #2   . . . . . . . .
+    #1   . . . . . . . .
+    #    a b c d e f g h
+    
+    input.lower()
+
+def game_loop():
+    print_game_board()
+    while gb.active_player != None:
+        print(f'{gb.active_player}\'s move: ')
+        move = input()
+        # if input invalid throw error
+        # try catch the situation
+        print(move)
+        if(gb.active_player == 'white'):
+            gb.active_player = 'black'
+        else:
+            gb.active_player = 'white'
+            
+
+        
 def start():
     start_prompt()
-    create_game_board_color_index()
-    create_game_board()
-    print_game_board()
+    game_loop()
 
 start()
