@@ -37,11 +37,20 @@ def start_prompt():
 def check_move_input():
     move = input()
     pattern = "([a-h][1-8]\s[a-h][1-8])"
-    if re.search(pattern, move):
-        print(move)
-        return
+    if re.search(pattern, move) and len(move) == 5:
+        move = move.split()
+        if move[0] == move[1]:
+            print("invalid selection.")
+            print(f'{gb.active_player}\'s move: ')
+            print("what will it be? ")
+            check_move_input()
+        else:
+            # accept move
+            return
     else:
         print("invalid selection.")
+        print(f'{gb.active_player}\'s move: ')
+        print("what will it be? ")
         check_move_input()
 
 def translate_move(input:str):
