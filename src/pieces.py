@@ -1,8 +1,29 @@
 from coordinate import Coordinate
-# class piece():
+from abc import ABC, abstractmethod
+
+class Piece(ABC):
+    def __init__(self, color, coordinate):
+        self.color = color
+        self.coordinate = coordinate
+        self.legal_moves = set()
+        self.letter = ''
+        self.color_letter = 'w' if self.color == 'white' else 'b'
+        self.create_move_set()
+    
+    @property
+    def full_name(self):
+        return f"{self.color_letter}{self.letter}"
+
+    @abstractmethod
+    def move(self):
+        pass
+
+    @abstractmethod
+    def create_move_set():
+        pass
 
 
-class Pawn():
+class Pawn(Piece):
     name = 'pawn'
     letter = 'p'
     color = ''
@@ -11,11 +32,7 @@ class Pawn():
     legal_moves = None
 
     def __init__(self, color, coordinate) -> None:
-        self.color = color
-        self.coordinate = coordinate
-        self.legal_moves = set()
-        self.color_letter = 'w' if self.color == 'white' else 'b'
-        self.create_move_set()
+        super().__init__(color, coordinate)
       
     def update_coordinate(self, new_coordinate):
         self.coordinate = new_coordinate
@@ -41,7 +58,7 @@ class Pawn():
             upper_right_coordinate = Coordinate(self.coordinate.x+1, self.coordinate.y+1)
             # self.legal_moves.add(check_legal_move(upper_left_coordinate,up_coordinate,upper_right_coordinate))
 
-class Rook():
+class Rook(Piece):
     name = 'rook'
     letter = 'r'
     color = ''
@@ -50,11 +67,7 @@ class Rook():
     legal_moves = None
 
     def __init__(self, color, coordinate) -> None:
-        self.color = color
-        self.coordinate = coordinate
-        self.legal_moves = set()
-        self.color_letter = 'w' if self.color == 'white' else 'b'
-        self.create_move_set()
+        super().__init__(color, coordinate)
 
     def move(self, newCoordinate):
         self.coordinate = newCoordinate
@@ -66,7 +79,7 @@ class Rook():
         # right
         # down
 
-class Knight():
+class Knight(Piece):
     name = 'knight'
     letter = 'k'
     color = ''
@@ -75,11 +88,7 @@ class Knight():
     legal_moves = None
 
     def __init__(self, color, coordinate) -> None:
-        self.color = color
-        self.coordinate = coordinate
-        self.legal_moves = set()
-        self.color_letter = 'w' if self.color == 'white' else 'b'
-        self.create_move_set()
+        super().__init__(color, coordinate)
 
     def move(self, newCoordinate):
         self.coordinate = newCoordinate
@@ -95,7 +104,7 @@ class Knight():
         # down-left
         # down-right
         
-class Bishop():
+class Bishop(Piece):
     name = 'bishop'
     letter = 'b'
     color = ''
@@ -104,11 +113,7 @@ class Bishop():
     legal_moves = None
 
     def __init__(self, color, coordinate) -> None:
-        self.color = color
-        self.coordinate = coordinate
-        self.legal_moves = set()
-        self.color_letter = 'w' if self.color == 'white' else 'b'
-        self.create_move_set()
+        super().__init__(color, coordinate)
 
     def move(self, newCoordinate):
         self.coordinate = newCoordinate
@@ -118,7 +123,7 @@ class Bishop():
         # left-diagonals
         # right-diagonals
 
-class Queen():
+class Queen(Piece):
     name = 'queen'
     letter = 'q'
     color = ''
@@ -127,11 +132,7 @@ class Queen():
     legal_moves = None
 
     def __init__(self, color, coordinate) -> None:
-        self.color = color
-        self.coordinate = coordinate
-        self.legal_moves = set()
-        self.color_letter = 'w' if self.color == 'white' else 'b'
-        self.create_move_set()
+        super().__init__(color, coordinate)
 
     def move(self, newCoordinate):
         self.coordinate = newCoordinate
@@ -140,7 +141,7 @@ class Queen():
         self.legal_moves.clear()
         # inheret from bishop and rook
 
-class King():
+class King(Piece):
     name = 'king'
     letter = 'K'
     color = ''
@@ -149,11 +150,7 @@ class King():
     legal_moves = None
 
     def __init__(self, color, coordinate) -> None:
-        self.color = color
-        self.coordinate = coordinate
-        self.legal_moves = set()
-        self.color_letter = 'w' if self.color == 'white' else 'b'
-        self.create_move_set()
+        super().__init__(color, coordinate)
 
     def move(self, newCoordinate):
         self.coordinate = newCoordinate
