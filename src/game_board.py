@@ -7,15 +7,15 @@ class Game_board:
     active_player = 'white'
     
     def __init__(self) -> None:
-        whiteturn = True
+        whiteside = True
         for y in range(8):
             for x in range(8): 
-                if whiteturn:
+                if whiteside:
                     self.color_index[x][y] = 'white'
                 else:
                     self.color_index[x][y] = 'black'
                 
-            whiteturn = not whiteturn
+            whiteside = not whiteside
             x = 0
             
         for y in range(2):

@@ -1,4 +1,3 @@
-from coordinate import Coordinate
 from game_board import Game_board
 import re
 
@@ -12,11 +11,11 @@ def print_game_board():
         print('\n')
         print( f"{8+i} ", end=' ')
         for x in range(8):
-            if board[x][y] != 0: 
-                print(f"{board[x][y].letter} ", end=' ')
+            if board[x][y] != 0:
+                board_piece =  board[x][y].color[0] + board[x][y].letter
+                print(f"{board_piece} ", end='')
             else: 
                 print(f".", end='  ')
-
         i-=1
     print("\n   ", end='')
     for i in range(8):
@@ -25,10 +24,9 @@ def print_game_board():
 
 def start_prompt():
     print("White or black? ")
-    active_player = input()
-    pattern = "white| White | black | Black"
-    if re.search(pattern, active_player):
-        print(active_player.lower()+"\'s move")
+    active_player = input().lower()
+    if active_player == "white" or "black":
+        print(active_player+"\'s move")
     else:
         print("please make a valid selection.")
         start_prompt()
@@ -36,6 +34,8 @@ def start_prompt():
 # Here
 def check_move_input():
     move = input()
+    if move.lower() == "exit":
+        quit()
     pattern = "([a-h][1-8]\s[a-h][1-8])"
     if re.search(pattern, move) and len(move) == 5:
         move = move.split()

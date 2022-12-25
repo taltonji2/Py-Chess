@@ -6,8 +6,6 @@ class Piece(ABC):
         self.color = color
         self.coordinate = coordinate
         self.legal_moves = set()
-        self.letter = ''
-        self.color_letter = 'w' if self.color == 'white' else 'b'
         self.create_move_set()
     
     @property
@@ -26,10 +24,6 @@ class Piece(ABC):
 class Pawn(Piece):
     name = 'pawn'
     letter = 'p'
-    color = ''
-    color_letter = ''
-    coordinate = None
-    legal_moves = None
 
     def __init__(self, color, coordinate) -> None:
         super().__init__(color, coordinate)
@@ -49,14 +43,19 @@ class Pawn(Piece):
         self.legal_moves.clear()
         if(self.color == 'black'):
             upper_left_coordinate = Coordinate(self.coordinate.x-1, self.coordinate.y-1)
+            self.legal_moves.add(upper_left_coordinate)
             up_coordinate = Coordinate(self.coordinate.x, self.coordinate.y-1)
+            self.legal_moves.add(up_coordinate)
             upper_right_coordinate = Coordinate(self.coordinate.x+1, self.coordinate.y-1)
-            # self.legal_moves.add(check_legal_move(upper_left_coordinate,up_coordinate,upper_right_coordinate))
+            self.legal_moves.add(upper_right_coordinate)
+            
         else:
             upper_left_coordinate = Coordinate(self.coordinate.x-1, self.coordinate.y+1)
+            self.legal_moves.add(upper_left_coordinate)
             up_coordinate = Coordinate(self.coordinate.x, self.coordinate.y+1)
+            self.legal_moves.add(up_coordinate)
             upper_right_coordinate = Coordinate(self.coordinate.x+1, self.coordinate.y+1)
-            # self.legal_moves.add(check_legal_move(upper_left_coordinate,up_coordinate,upper_right_coordinate))
+            self.legal_moves.add(upper_right_coordinate)
 
 class Rook(Piece):
     name = 'rook'
