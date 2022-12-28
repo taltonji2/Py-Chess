@@ -23,7 +23,7 @@ def print_game_board():
             
 
 def start_prompt():
-    print("White or black? ")
+    print("white or black? ")
     active_player = input().lower()
     if active_player == "white" or "black":
         print(active_player+"\'s move")
@@ -39,20 +39,21 @@ def check_move_input():
     if re.search(pattern, move) and len(move) == 5:
         move = move.split()
         if move[0] == move[1]:
-            invalid_move()
+            invalid_move("you must move to a new position")
+        move = translate_move(move)
+        if gb.active_player != gb.board[move[0][0]][move[0][1]].color:
+            invalid_move("you must play your own color")
+        elif gb.board[move[0][0]][move[0][1]].check_move(move[1][0], move[1][1]):
+            gb.move_piece(move[0][0], move[0][1], move[1][0], move[1][1])
+            gb.update_available_moves()
+            print_game_board()
         else:
-            move = translate_move(move)
-            if gb.board[move[0][0]][move[0][1]].check_move(move[1][0], move[1][1]):
-                    gb.move_piece(move[0][0], move[0][1], move[1][0], move[1][1])
-                    gb.update_available_moves()
-                    print_game_board()
-            else:
-                invalid_move()
+            invalid_move("move not available")
     else:
-        invalid_move()
+        invalid_move("input syntax error")
 
-def invalid_move():
-    print("invalid selection.")
+def invalid_move(message):
+    print("forbidden. " + message)
     print(f'{gb.active_player}\'s move: ')
     print("what will it be? ")
     check_move_input()

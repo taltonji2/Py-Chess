@@ -12,14 +12,15 @@ class Piece(ABC):
     def full_name(self):
         return f"{self.color_letter}{self.letter}"
 
-    @abstractmethod
-    def move(self):
-        pass
+    def move(self, x, y):
+        self.coordinate = Coordinate(x,y)
 
-    @abstractmethod
-    def check_move():
-        pass
-
+    def check_move(self, new_x, new_y):
+        for move in self.legal_moves:
+            if move.x == new_x and move.y == new_y:
+                return True
+        return False
+    
     @abstractmethod
     def create_move_set():
         pass
@@ -35,9 +36,6 @@ class Pawn(Piece):
     def update_coordinate(self, new_coordinate):
         self.coordinate = new_coordinate
         self.create_move_set()
-    
-    def move(self, x, y):
-        self.coordinate = Coordinate(x,y)
 
     def create_move_set(self):
         self.legal_moves.clear()
@@ -56,12 +54,7 @@ class Pawn(Piece):
             upper_right_coordinate = Coordinate(self.coordinate.x+1, self.coordinate.y+1)
             self.legal_moves.add(upper_right_coordinate)
     
-    def check_move(self, new_x, new_y):
-        for move in self.legal_moves:
-            if move.x == new_x and move.y == new_y:
-                return True
-        return False
-        
+
 class Rook(Piece):
     name = 'rook'
     letter = 'r'
@@ -73,20 +66,12 @@ class Rook(Piece):
     def __init__(self, color, coordinate) -> None:
         super().__init__(color, coordinate)
 
-    def move(self, newCoordinate):
-        self.coordinate = newCoordinate
-
     def create_move_set(self):
         self.legal_moves.clear()
         # left
         # up
         # right
         # down
-    def check_move(self, new_x, new_y):
-        for move in self.legal_moves:
-            if move.x == new_x and move.y == new_y:
-                return True
-        return False
 
 class Knight(Piece):
     name = 'knight'
@@ -98,9 +83,6 @@ class Knight(Piece):
 
     def __init__(self, color, coordinate) -> None:
         super().__init__(color, coordinate)
-
-    def move(self, newCoordinate):
-        self.coordinate = newCoordinate
     
     def create_move_set(self):
         self.legal_moves.clear()
@@ -112,11 +94,6 @@ class Knight(Piece):
         # right-down
         # down-left
         # down-right
-    def check_move(self, new_x, new_y):
-        for move in self.legal_moves:
-            if move.x == new_x and move.y == new_y:
-                return True
-        return False
         
 class Bishop(Piece):
     name = 'bishop'
@@ -128,19 +105,11 @@ class Bishop(Piece):
 
     def __init__(self, color, coordinate) -> None:
         super().__init__(color, coordinate)
-
-    def move(self, newCoordinate):
-        self.coordinate = newCoordinate
     
     def create_move_set(self):
         self.legal_moves.clear()
         # left-diagonals
         # right-diagonals
-    def check_move(self, new_x, new_y):
-        for move in self.legal_moves:
-            if move.x == new_x and move.y == new_y:
-                return True
-        return False
 
 class Queen(Piece):
     name = 'queen'
@@ -153,18 +122,9 @@ class Queen(Piece):
     def __init__(self, color, coordinate) -> None:
         super().__init__(color, coordinate)
 
-    def move(self, newCoordinate):
-        self.coordinate = newCoordinate
-    
     def create_move_set(self):
         self.legal_moves.clear()
         # inheret from bishop and rook
-    
-    def check_move(self, new_x, new_y):
-        for move in self.legal_moves:
-            if move.x == new_x and move.y == new_y:
-                return True
-        return False
 
 class King(Piece):
     name = 'king'
@@ -176,9 +136,6 @@ class King(Piece):
 
     def __init__(self, color, coordinate) -> None:
         super().__init__(color, coordinate)
-
-    def move(self, newCoordinate):
-        self.coordinate = newCoordinate
     
     def create_move_set(self):
         self.legal_moves.clear()
@@ -190,8 +147,3 @@ class King(Piece):
         # lower-left
         # lower-right
         # down
-    def check_move(self, new_x, new_y):
-        for move in self.legal_moves:
-            if move.x == new_x and move.y == new_y:
-                return True
-        return False
