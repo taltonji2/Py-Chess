@@ -43,7 +43,7 @@ def check_move_input():
         else:
             move = translate_move(move)
             if gb.board[move[0][0], move[0][1]].check_move(move[1][0], move[1][1]):
-                    gb.board[move[0][0], move[0][1]].move(move[1][0], move[1][1])
+                    gb.board.move(move[0][0], move[0][1], move[1][0], move[1][1])
                     gb.update_available_moves()
             else:
                 invalid_move()
