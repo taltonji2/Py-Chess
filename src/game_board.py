@@ -66,7 +66,7 @@ class Game_board:
                     if type(self.board[x][y]) == Piece: 
                         self.board[x][y].create_move_set()
     
-    def move(self, x1, y1, x2, y2):
-        self.board[x1,y1].move(x2,y2)
-        self.board[x2,y2] = self.board[x1,y1]
-        self.board[x1,y1] = '.'
+    def move_piece(self, x1, y1, x2, y2):
+        self.board[x1][y1].move(x2,y2)
+        self.board[x2][y2] = self.board[x1][y1]
+        self.board[x1][y1] = 0

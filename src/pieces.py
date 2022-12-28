@@ -82,6 +82,11 @@ class Rook(Piece):
         # up
         # right
         # down
+    def check_move(self, new_x, new_y):
+        for move in self.legal_moves:
+            if move.x == new_x and move.y == new_y:
+                return True
+        return False
 
 class Knight(Piece):
     name = 'knight'
@@ -107,6 +112,11 @@ class Knight(Piece):
         # right-down
         # down-left
         # down-right
+    def check_move(self, new_x, new_y):
+        for move in self.legal_moves:
+            if move.x == new_x and move.y == new_y:
+                return True
+        return False
         
 class Bishop(Piece):
     name = 'bishop'
@@ -126,6 +136,11 @@ class Bishop(Piece):
         self.legal_moves.clear()
         # left-diagonals
         # right-diagonals
+    def check_move(self, new_x, new_y):
+        for move in self.legal_moves:
+            if move.x == new_x and move.y == new_y:
+                return True
+        return False
 
 class Queen(Piece):
     name = 'queen'
@@ -144,6 +159,12 @@ class Queen(Piece):
     def create_move_set(self):
         self.legal_moves.clear()
         # inheret from bishop and rook
+    
+    def check_move(self, new_x, new_y):
+        for move in self.legal_moves:
+            if move.x == new_x and move.y == new_y:
+                return True
+        return False
 
 class King(Piece):
     name = 'king'
@@ -169,3 +190,8 @@ class King(Piece):
         # lower-left
         # lower-right
         # down
+    def check_move(self, new_x, new_y):
+        for move in self.legal_moves:
+            if move.x == new_x and move.y == new_y:
+                return True
+        return False

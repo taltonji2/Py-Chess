@@ -42,9 +42,10 @@ def check_move_input():
             invalid_move()
         else:
             move = translate_move(move)
-            if gb.board[move[0][0], move[0][1]].check_move(move[1][0], move[1][1]):
-                    gb.board.move(move[0][0], move[0][1], move[1][0], move[1][1])
+            if gb.board[move[0][0]][move[0][1]].check_move(move[1][0], move[1][1]):
+                    gb.move_piece(move[0][0], move[0][1], move[1][0], move[1][1])
                     gb.update_available_moves()
+                    print_game_board()
             else:
                 invalid_move()
     else:
