@@ -17,6 +17,10 @@ class Piece(ABC):
         pass
 
     @abstractmethod
+    def check_move():
+        pass
+
+    @abstractmethod
     def create_move_set():
         pass
 
@@ -32,12 +36,8 @@ class Pawn(Piece):
         self.coordinate = new_coordinate
         self.create_move_set()
     
-    def move(self, new_coordinate: Coordinate, gb):
-        for coordinate in self.legal_moves:
-            if coordinate.x == new_coordinate.x and coordinate.y == new_coordinate.y:
-                print('legal move.')
-        else:
-            print('illegal move.') 
+    def move(self, x, y):
+        self.coordinate = Coordinate(x,y)
 
     def create_move_set(self):
         self.legal_moves.clear()
@@ -48,7 +48,6 @@ class Pawn(Piece):
             self.legal_moves.add(up_coordinate)
             upper_right_coordinate = Coordinate(self.coordinate.x+1, self.coordinate.y-1)
             self.legal_moves.add(upper_right_coordinate)
-            
         else:
             upper_left_coordinate = Coordinate(self.coordinate.x-1, self.coordinate.y+1)
             self.legal_moves.add(upper_left_coordinate)
@@ -56,7 +55,13 @@ class Pawn(Piece):
             self.legal_moves.add(up_coordinate)
             upper_right_coordinate = Coordinate(self.coordinate.x+1, self.coordinate.y+1)
             self.legal_moves.add(upper_right_coordinate)
-
+    
+    def check_move(self, new_x, new_y):
+        for move in self.legal_moves:
+            if move.x == new_x and move.y == new_y:
+                return True
+        return False
+        
 class Rook(Piece):
     name = 'rook'
     letter = 'r'

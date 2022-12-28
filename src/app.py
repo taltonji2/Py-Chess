@@ -1,3 +1,4 @@
+from coordinate import Coordinate
 from game_board import Game_board
 import re
 
@@ -30,40 +31,40 @@ def start_prompt():
         print("please make a valid selection.")
         start_prompt()
 
-# Here
 def check_move_input():
-    move = input()
-    if move.lower() == "exit":
+    move = input().lower()
+    if move == "exit":
         quit()
     pattern = "([a-h][1-8]\s[a-h][1-8])"
     if re.search(pattern, move) and len(move) == 5:
         move = move.split()
         if move[0] == move[1]:
-            print("invalid selection.")
-            print(f'{gb.active_player}\'s move: ')
-            print("what will it be? ")
-            check_move_input()
+            invalid_move()
         else:
-            # accept move
-            gb.update_available_moves()
-            return
+            move = translate_move(move)
+            if gb.board[move[0][0], move[0][1]].check_move(move[1][0], move[1][1]):
+                    gb.board[move[0][0], move[0][1]].move(move[1][0], move[1][1])
+                    gb.update_available_moves()
+            else:
+                invalid_move()
     else:
-        print("invalid selection.")
-        print(f'{gb.active_player}\'s move: ')
-        print("what will it be? ")
-        check_move_input()
+        invalid_move()
 
-def translate_move(input:str):
-    #8   . . . . . . . .
-    #7   . . . . . . . .
-    #6   . . . . . . . .
-    #5   . . . . . . . .
-    #4   . . . . . . . .
-    #3   . . . . . . . .
-    #2   . . . . . . . .
-    #1   . . . . . . . .
-    #    a b c d e f g h
-    input.lower()
+def invalid_move():
+    print("invalid selection.")
+    print(f'{gb.active_player}\'s move: ')
+    print("what will it be? ")
+    check_move_input()
+
+def translate_move(move:list):
+    letter_array = ['a','b','c','d','e','f','g','h']
+    new_move = []
+    for position in move:
+        x = letter_array.index(position[0])
+        y = 8 - int(position[1])
+        new_move.append([x,y])
+    return new_move
+
 
 def game_loop():
     print_game_board()
