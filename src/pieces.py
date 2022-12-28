@@ -25,7 +25,6 @@ class Piece(ABC):
     def create_move_set():
         pass
 
-
 class Pawn(Piece):
     name = 'pawn'
     letter = 'p'
@@ -39,21 +38,29 @@ class Pawn(Piece):
 
     def create_move_set(self):
         self.legal_moves.clear()
+        x = self.coordinate.x
+        y = self.coordinate.y
+        
         if(self.color == 'black'):
-            upper_left_coordinate = Coordinate(self.coordinate.x-1, self.coordinate.y-1)
-            self.legal_moves.add(upper_left_coordinate)
-            up_coordinate = Coordinate(self.coordinate.x, self.coordinate.y-1)
-            self.legal_moves.add(up_coordinate)
-            upper_right_coordinate = Coordinate(self.coordinate.x+1, self.coordinate.y-1)
-            self.legal_moves.add(upper_right_coordinate)
+            if (x-1 > -1 and y-1 > -1):
+                upper_left_coordinate = Coordinate(x-1, y-1)
+                self.legal_moves.add(upper_left_coordinate)
+            if (y-1 > -1):
+                up_coordinate = Coordinate(x, y-1)
+                self.legal_moves.add(up_coordinate)
+            if (x+1 < 8 and y-1 > -1):
+                upper_right_coordinate = Coordinate(self.coordinate.x+1, self.coordinate.y-1)
+                self.legal_moves.add(upper_right_coordinate)
         else:
-            upper_left_coordinate = Coordinate(self.coordinate.x-1, self.coordinate.y+1)
-            self.legal_moves.add(upper_left_coordinate)
-            up_coordinate = Coordinate(self.coordinate.x, self.coordinate.y+1)
-            self.legal_moves.add(up_coordinate)
-            upper_right_coordinate = Coordinate(self.coordinate.x+1, self.coordinate.y+1)
-            self.legal_moves.add(upper_right_coordinate)
-    
+            if (x-1 > -1 and y+1 < 8):
+                upper_left_coordinate = Coordinate(self.coordinate.x-1, self.coordinate.y+1)
+                self.legal_moves.add(upper_left_coordinate)
+            if (y+1 < 8):
+                up_coordinate = Coordinate(self.coordinate.x, self.coordinate.y+1)
+                self.legal_moves.add(up_coordinate)
+            if (x+1< 8 and y+1 < 8):
+                upper_right_coordinate = Coordinate(self.coordinate.x+1, self.coordinate.y+1)
+                self.legal_moves.add(upper_right_coordinate)
 
 class Rook(Piece):
     name = 'rook'
@@ -68,10 +75,25 @@ class Rook(Piece):
 
     def create_move_set(self):
         self.legal_moves.clear()
-        # left
-        # up
-        # right
-        # down
+        x = self.coordinate.x
+        y = self.coordinate.y
+
+        for xi in range(x):
+            left_coordinate = Coordinate(xi, y)
+            self.legal_moves.add(left_coordinate)
+
+        for yi in range(0, y):
+            up_coordinate = Coordinate(x, yi)
+            self.legal_moves.add(up_coordinate)
+
+        for xi in range(x, 8):
+            right_coordinate = Coordinate(xi, y)
+            self.legal_moves.add(right_coordinate)
+
+        for yi in range(y, 8):
+                down_coordinate = Coordinate(x, yi)
+                self.legal_moves.add(down_coordinate)
+
 
 class Knight(Piece):
     name = 'knight'
