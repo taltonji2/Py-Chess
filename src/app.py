@@ -2,7 +2,6 @@ from game_board import Game_board
 import re
 
 gb = Game_board()
-board = gb.board
 
 def print_game_board():
     i = 0
@@ -11,8 +10,8 @@ def print_game_board():
         print('\n')
         print( f"{8+i} ", end=' ')
         for x in range(8):
-            if board[x][y] != 0:
-                board_piece =  board[x][y].color[0] + board[x][y].letter
+            if gb.board[x][y] != 0:
+                board_piece =  gb.board[x][y].color[0] + gb.board[x][y].letter
                 print(f"{board_piece} ", end='')
             else: 
                 print(f".", end='  ')
@@ -46,6 +45,7 @@ def check_move_input():
             check_move_input()
         else:
             # accept move
+            gb.update_available_moves()
             return
     else:
         print("invalid selection.")

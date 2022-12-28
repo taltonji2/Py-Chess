@@ -1,4 +1,4 @@
-from pieces import Pawn, Rook, Knight, Bishop, Queen, King
+from pieces import Pawn, Piece, Rook, Knight, Bishop, Queen, King
 from coordinate import Coordinate
 
 class Game_board:
@@ -59,3 +59,9 @@ class Game_board:
                     self.board[x][y] = Knight('black', Coordinate(x,y))
                 if x == 7 and y ==7:
                     self.board[x][y] = Rook('black', Coordinate(x,y))
+    
+    def update_available_moves(self):
+        for y in range(8):
+                for x in range(8):
+                    if type(self.board[x][y]) == Piece: 
+                        self.board[x][y].create_move_set()
