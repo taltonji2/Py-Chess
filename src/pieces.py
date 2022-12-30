@@ -21,6 +21,10 @@ class Piece(ABC):
                 return True
         return False
     
+    def update_coordinate(self, new_coordinate):
+        self.coordinate = new_coordinate
+        self.create_move_set()
+
     @abstractmethod
     def create_move_set():
         pass
@@ -31,12 +35,8 @@ class Pawn(Piece):
 
     def __init__(self, color, coordinate) -> None:
         super().__init__(color, coordinate)
-      
-    def update_coordinate(self, new_coordinate):
-        self.coordinate = new_coordinate
-        self.create_move_set()
 
-    def create_move_set(self):
+    def create_move_set(self, gb):
         self.legal_moves.clear()
         x = self.coordinate.x
         y = self.coordinate.y
@@ -69,7 +69,7 @@ class Rook(Piece):
     def __init__(self, color, coordinate) -> None:
         super().__init__(color, coordinate)
 
-    def create_move_set(self):
+    def create_move_set(self, gb):
         self.legal_moves.clear()
         x = self.coordinate.x
         y = self.coordinate.y
@@ -97,7 +97,7 @@ class Knight(Piece):
     def __init__(self, color, coordinate) -> None:
         super().__init__(color, coordinate)
     
-    def create_move_set(self):
+    def create_move_set(self, gb):
         self.legal_moves.clear()
         x = self.coordinate.x
         y = self.coordinate.y
@@ -135,7 +135,7 @@ class Bishop(Piece):
     def __init__(self, color, coordinate) -> None:
         super().__init__(color, coordinate)
     
-    def create_move_set(self):
+    def create_move_set(self, gb):
         self.legal_moves.clear()
         x = self.coordinate.x, y = self.coordinate.y
         while x > -1 and y > -1:
@@ -169,7 +169,7 @@ class Queen(Piece):
     def __init__(self, color, coordinate) -> None:
         super().__init__(color, coordinate)
 
-    def create_move_set(self):
+    def create_move_set(self, gb):
         self.legal_moves.clear()
 
         x = self.coordinate.x, y = self.coordinate.y
@@ -212,8 +212,7 @@ class Queen(Piece):
             x += 1
             y += 1
             down_right_diagonal = Coordinate(x, y)
-            self.legal_moves.add(down_right_diagonal)
-        
+            self.legal_moves.add(down_right_diagonal)   
 
 class King(Piece):
     name = 'king'
@@ -222,14 +221,30 @@ class King(Piece):
     def __init__(self, color, coordinate) -> None:
         super().__init__(color, coordinate)
     
-    def create_move_set(self):
+    def create_move_set(self, gb):
         self.legal_moves.clear()
         x = self.coordinate.x, y = self.coordinate.y
-        upper_left = Coordinate(x-1, y-1)
-        up = Coordinate(x, y-1)
-        upper_right = Coordinate(x+1, y-1)
-        left = Coordinate(x-1, y)
-        right = Coordinate(x+1, y)
-        lower_left = Coordinate(x-1, y+1)
-        lower_right = Coordinate(x+1, y+1)
-        down = Coordinate(x, y+1)
+        if x-1>-1 and y-1 >-1:
+            upper_left = Coordinate(x-1, y-1)
+            self.legal_moves.add(upper_left)
+        if y-1>-1:
+            up = Coordinate(x, y-1)
+            self.legal_moves.add(up)
+        if x+1<8 and y-1>-1:
+            upper_right = Coordinate(x+1, y-1)
+            self.legal_moves.add(upper_right)
+        if x-1>-1:
+            left = Coordinate(x-1, y)
+            self.legal_moves.add(left)
+        if x+1<8:
+            right = Coordinate(x+1, y)
+            self.legal_moves.add(right)
+        if x-1>-1 and y+1<8:
+            lower_left = Coordinate(x-1, y+1)
+            self.legal_moves.add(lower_left)
+        if x+1<8 and y+1<8:
+            lower_right = Coordinate(x+1, y+1)
+            self.legal_moves.add(lower_right)
+        if y+1<8:
+            down = Coordinate(x, y+1)
+            self.legal_moves.add(down)

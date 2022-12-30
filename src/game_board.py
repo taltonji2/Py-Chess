@@ -63,7 +63,7 @@ class Game_board:
     def update_available_moves(self):
         for y in range(8):
                 for x in range(8):
-                    if type(self.board[x][y]) == Piece: 
+                    if isinstance(self.board[x][y], Piece): 
                         self.board[x][y].create_move_set()
     
     def move_piece(self, x1, y1, x2, y2):
