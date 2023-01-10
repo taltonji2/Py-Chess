@@ -35,15 +35,19 @@ def check_move_input():
     move = input().lower()
     if move == "exit":
         quit()
+    # if "lookup" == move[0:6]:
+    #     move = move[6:len(move)]
     pattern = "([a-h][1-8]\s[a-h][1-8])"
     if re.search(pattern, move) and len(move) == 5:
         move = move.split()
         if move[0] == move[1]:
             invalid_move("you must move to a new position")
         move = translate_move(move)
+        print(move)
         if gb.active_player != gb.board[move[0][0]][move[0][1]].color:
             invalid_move("you must play your own color")
-        elif gb.board[move[0][0]][move[0][1]].check_move(move[1][0], move[1][1]):
+        if gb.board[move[0][0]][move[0][1]].check_move(move[1][0], move[1][1]):
+            print(gb.board[move[0][0]][move[0][1]].available_coordinates)
             gb.move_piece(move[0][0], move[0][1], move[1][0], move[1][1])
             gb.update_available_moves()
             print_game_board()
@@ -69,6 +73,7 @@ def translate_move(move:list):
 
 
 def game_loop():
+    gb.update_available_moves()
     print_game_board()
     while gb.active_player != None:
         print(f'\n{gb.active_player}\'s move: ')
