@@ -59,6 +59,8 @@ class Game_board:
                     self.board[x][y] = Knight('black', Coordinate(x,y))
                 if x == 7 and y ==7:
                     self.board[x][y] = Rook('black', Coordinate(x,y))
+        
+        self.update_available_moves()
     
     def update_pawn(self, x, y):
         if(self.board[x][y].color == 'black'):
@@ -68,7 +70,6 @@ class Game_board:
                     self.board[x][y].available_coordinates.add(upper_left_coordinate)
                 elif (isinstance(self.board[x-1][y-1], Piece) and self.board[x-1][y-1].color != self.board[x][y].color):
                     self.board[x][y].available_coordinates.add(upper_left_coordinate)
-                
                 
             if (y-1 > -1 and self.board[x-1][y-1] == 0):
                 up_coordinate = Coordinate(x, y-1)
@@ -102,45 +103,51 @@ class Game_board:
                
         
     def update_rook(self, x, y):
-        for xi in range(x):
-            left_coordinate = Coordinate(xi, y)
-            if self.board[xi][y] == 0:
-                self.board[x][y].available_coordinates.add(left_coordinate)
-            elif self.board[xi][y].color != self.board[x][y].color:
-                self.board[x][y].available_coordinates.add(left_coordinate)
+        left_coordinate = Coordinate(x-1, y)
+        while left_coordinate.x > -1:
+            if self.board[left_coordinate.x][left_coordinate.y] == 0:
+                self.board[x][y].available_coordinates.add(Coordinate(left_coordinate.x, left_coordinate.y))
+            elif self.board[left_coordinate.x][left_coordinate.y].color == self.board[x][y].color:
                 break
-            else:
+            else: 
+                self.board[x][y].available_coordinates.add(Coordinate(left_coordinate.x, left_coordinate.y))
                 break
+            left_coordinate.x = left_coordinate.x - 1
+        
+        right_coordinate = Coordinate(x+1, y)
+        while right_coordinate.x < 8:
+            if self.board[right_coordinate.x][right_coordinate.y] == 0:
+                self.board[x][y].available_coordinates.add(Coordinate(right_coordinate.x, right_coordinate.y))
+            elif self.board[right_coordinate.x][right_coordinate.y].color == self.board[x][y].color:
+                break
+            else: 
+                self.board[x][y].available_coordinates.add(Coordinate(right_coordinate.x, right_coordinate.y))
+                break
+            right_coordinate.x = right_coordinate.x + 1
+        
+        up_coordinate = Coordinate(x, y-1)
+        while up_coordinate.y > -1:
+            if self.board[up_coordinate.x][up_coordinate.y] == 0:
+                self.board[x][y].available_coordinates.add(Coordinate(up_coordinate.x, up_coordinate.y))
+            elif self.board[up_coordinate.x][up_coordinate.y].color == self.board[x][y].color:
+                break
+            else: 
+                self.board[x][y].available_coordinates.add(Coordinate(up_coordinate.x, up_coordinate.y))
+                break
+            up_coordinate.y = up_coordinate.y-1
+        
+        down_coordinate = Coordinate(x, y+1)
+        while down_coordinate.y < 8:
+            if self.board[down_coordinate.x][down_coordinate.y] == 0:
+                self.board[x][y].available_coordinates.add(Coordinate(down_coordinate.x, down_coordinate.y))
+            elif self.board[down_coordinate.x][down_coordinate.y].color == self.board[x][y].color:
+                break
+            else: 
+                self.board[x][y].available_coordinates.add(Coordinate(down_coordinate.x, down_coordinate.y))
+                break
+            down_coordinate.y = down_coordinate.y + 1
 
-        for yi in range(0, y):
-            up_coordinate = Coordinate(x, yi)
-            if self.board[x][yi]==0:
-                self.board[x][y].available_coordinates.add(up_coordinate)
-            elif self.board[x][yi].color != self.board[x][y].color:
-                self.board[x][y].available_coordinates.add(up_coordinate)
-                break
-            else:
-                break
-
-        for xi in range(x, 8):
-            right_coordinate = Coordinate(xi, y)
-            if self.board[xi][y] == 0:
-                self.board[x][y].available_coordinates.add(right_coordinate)
-            if self.board[xi][y] != 0 and self.board[xi][y].color != self.board[x][y].color:
-                self.board[x][y].available_coordinates.add(right_coordinate)
-                break
-            else:
-                break
-
-        for yi in range(y, 8):
-            down_coordinate = Coordinate(x, yi)
-            if self.board[x][yi] == 0:
-                self.board[x][y].available_coordinates.add(down_coordinate)
-            if self.board[x][yi] != 0 and self.board[x][yi].color != self.board[x][y].color:
-                self.board[x][y].available_coordinates.add(down_coordinate)
-                break
-            else:
-                break
+        
 
     def update_knight(self, x, y):
         up_left = Coordinate(x-1,y-2)
@@ -197,11 +204,12 @@ class Game_board:
         originalx = x
         originaly = y
         
-        while x > -1 and y > -1:
+        while x > 0 and y > 0:
             x -= 1
             y -= 1
             up_left_diagonal = Coordinate(x, y)
             if self.board[x][y] == 0:
+                print(self.board[x][y])
                 self.board[x][y].available_coordinates.add(up_left_diagonal)
             elif self.board[x][y].color != self.board[originalx][originaly].color:
                 self.board[x][y].available_coordinates.add(up_left_diagonal)
@@ -290,34 +298,40 @@ class Game_board:
                 self.board[x][y].available_coordinates.add(down)
     
     def update_available_moves(self):
-        for y in range(8):
-                for x in range(8):
+        for x in range(8):
+                for y in range(8):
                     if isinstance(self.board[x][y], Piece):
-                        if isinstance(self.board[x][y], Pawn):
+                        if type(self.board[x][y]) is int:
+                            continue
+                        elif type(self.board[x][y]) is Pawn:
                             self.board[x][y].available_coordinates.clear()  
                             self.update_pawn(x, y)
-                        elif isinstance(self.board[x][y], Knight):  
+                        elif type(self.board[x][y]) is Knight:  
                             self.board[x][y].available_coordinates.clear() 
                             self.update_knight(x, y)
-                        elif isinstance(self.board[x][y], Rook):  
+                        elif type(self.board[x][y]) is Rook:  
                             self.board[x][y].available_coordinates.clear() 
                             self.update_rook(x, y)
-                        elif isinstance(self.board[x][y], Bishop):  
+                        elif type(self.board[x][y]) is Bishop:  
                             self.board[x][y].available_coordinates.clear() 
                             self.update_bishop(x, y)
-                        elif isinstance(self.board[x][y], King):  
+                        elif type(self.board[x][y]) is King:  
                             self.board[x][y].available_coordinates.clear() 
                             self.update_king(x, y)
-                        elif isinstance(self.board[x][y], Queen):  
+                        elif type(self.board[x][y]) is Queen:  
                             self.board[x][y].available_coordinates.clear() 
                             self.update_rook(x, y)
                             self.update_bishop(x, y)
     
     def move_piece(self, x1, y1, x2, y2):
+        self.board[x1][y1].move(x2, y2)
         self.board[x2][y2] = self.board[x1][y1]
         self.board[x1][y1] = 0
 
-    def look_up_moves(self, x, y):
-        return self.board[x][y].available_coordinates
+    def is_a_move(self, x1, y1, x2, y2):
+        for coordinate in self.board[x1][y1].available_coordinates:
+            if coordinate.x == x2 and coordinate.y == y2:
+                return True
+        return False
 
     

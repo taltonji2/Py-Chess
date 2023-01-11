@@ -9,7 +9,7 @@ class Piece(ABC):
     
     @property
     def full_name(self):
-        return f"{self.color_letter}{self.letter}"
+        return f"{self.name}{self.color}"
 
     def move(self, x, y):
         self.coordinate = Coordinate(x,y)
@@ -20,9 +20,10 @@ class Piece(ABC):
                 return True
         return False
     
-    def update_coordinate(self, new_coordinate):
-        self.coordinate = new_coordinate
-        self.create_move_set()
+    def __repr__(self):
+        return self.letter + self.color
+
+
 
 class Pawn(Piece):
     name = 'pawn'
@@ -74,5 +75,3 @@ class King(Piece):
     def __init__(self, color, coordinate) -> None:
         super().__init__(color, coordinate)
     
-    def check_checkmate(self):
-        return False

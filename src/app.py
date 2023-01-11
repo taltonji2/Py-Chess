@@ -39,20 +39,26 @@ def check_move_input():
     #     move = move[6:len(move)]
     pattern = "([a-h][1-8]\s[a-h][1-8])"
     if re.search(pattern, move) and len(move) == 5:
-        move = move.split()
+        move = translate_move(move.split())
         if move[0] == move[1]:
             invalid_move("you must move to a new position")
-        move = translate_move(move)
-        print(move)
-        if gb.active_player != gb.board[move[0][0]][move[0][1]].color:
+        
+        if gb.board[move[0][0]][move[0][1]] == 0:
+            invalid_move("no piece there")
+        
+        x1 = move[0][0] 
+        x2 = move[1][0]
+        y1 = move[0][1] 
+        y2 = move[1][1]
+        
+        if gb.active_player != gb.board[x1][y1].color:
             invalid_move("you must play your own color")
-        if gb.board[move[0][0]][move[0][1]].check_move(move[1][0], move[1][1]):
-            print(gb.board[move[0][0]][move[0][1]].available_coordinates)
-            gb.move_piece(move[0][0], move[0][1], move[1][0], move[1][1])
+        if gb.is_a_move(x1, y1, x2, y2):
+            gb.move_piece(x1, y1, x2, y2)
             gb.update_available_moves()
             print_game_board()
         else:
-            invalid_move("move not available")
+            invalid_move("move does not exist")
     else:
         invalid_move("input syntax error")
 
@@ -73,7 +79,6 @@ def translate_move(move:list):
 
 
 def game_loop():
-    gb.update_available_moves()
     print_game_board()
     while gb.active_player != None:
         print(f'\n{gb.active_player}\'s move: ')
@@ -85,7 +90,6 @@ def game_loop():
             gb.active_player = 'white'
             
 
-        
 def start():
     start_prompt()
     game_loop()
