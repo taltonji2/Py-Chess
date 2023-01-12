@@ -159,42 +159,42 @@ class Game_board:
         down_left = Coordinate(x-1, y+2)
         down_right = Coordinate(x+1, y+2)
         
-        if x-1>-1 and y-2>-1:
+        if x-1>=0 and y-2>=0:
             if self.board[x-1][y-2] == 0:
                 self.board[x][y].available_coordinates.add(up_left)
             if self.board[x-1][y-2] != 0 and self.board[x-1][y-2].color != self.board[x][y].color:
                self.board[x][y].available_coordinates.add(up_left)
-        if x+1<8 and y-2>-1:
+        if x+1<=7 and y-2>=0:
             if self.board[x+1][y-2] == 0:
                 self.board[x][y].available_coordinates.add(up_right)
             if self.board[x+1][y-2] != 0 and self.board[x-1][y-2].color != self.board[x][y].color:
                 self.board[x][y].available_coordinates.add(up_right)
-        if x-2>-1 and y-1>-1:
+        if x-2>=0 and y-1>=0:
             if self.board[x-2][y-1] == 0:
                 self.board[x][y].available_coordinates.add(left_up)
             if self.board[x-2][y-1] != 0 and self.board[x-2][y-1].color != self.board[x][y].color:
                 self.board[x][y].available_coordinates.add(left_up)
-        if x-2>-1 and y+1<8:
+        if x-2>=0 and y+1<=7:
             if self.board[x-2][y+1] == 0:
                 self.board[x][y].available_coordinates.add(left_down)
             if self.board[x-2][y+1] != 0 and self.board[x-2][y+1].color != self.board[x][y].color:
                 self.board[x][y].available_coordinates.add(left_down)
-        if x+2<8 and y-1>-1:
+        if x+2<=7 and y-1>=0:
             if self.board[x+2][y-1] == 0:
                 self.board[x][y].available_coordinates.add(right_up)
             if self.board[x+2][y-1] != 0 and self.board[x+2][y-1].color != self.board[x][y].color:
                 self.board[x][y].available_coordinates.add(right_up)
-        if x+2<8 and y+1<8:
+        if x+2<=7 and y+1<=7:
             if self.board[x+2][y+1] == 0:
                 self.board[x][y].available_coordinates.add(right_down)
             if self.board[x+2][y+1] != 0 and self.board[x+2][y+1].color != self.board[x][y].color:
                 self.board[x][y].available_coordinates.add(right_down)
-        if x-1>-1 and y+2<8:
+        if x-1>=0 and y+2<=7:
             if self.board[x-1][y+2] == 0:
                 self.board[x][y].available_coordinates.add(down_left)
             if self.board[x-1][y+2] != 0 and self.board[x-1][y+2].color != self.board[x][y].color:
                 self.board[x][y].available_coordinates.add(down_left)
-        if x+1<8 and y+2<8:
+        if x+1<=7 and y+2<=7:
             if self.board[x+1][y+2] == 0:
                 self.board[x][y].available_coordinates.add(down_right)
             if self.board[x+1][y+2] != 0 and self.board[x+1][y+2].color != self.board[x][y].color:
@@ -220,7 +220,7 @@ class Game_board:
         x = originalx
         y = originaly
         
-        while x+1 < 8 and y-1 > -1:
+        while x+1 < 7 and y-1 > 0:
             x += 1
             y -= 1
             up_right_diagonal = Coordinate(x, y)
@@ -235,7 +235,7 @@ class Game_board:
         x = originalx
         y = originaly
 
-        while x-1 > -1 and y+1 < 8:
+        while x-1 > 0 and y+1 < 7:
             x = x - 1
             y = y + 1
             down_left_diagonal = Coordinate(x, y)
@@ -251,7 +251,7 @@ class Game_board:
         x = originalx
         y = originaly
         
-        while x+1 < 8 and y+1 < 8:
+        while x+1 < 7 and y+1 < 7:
             x += 1
             y += 1
             down_right_diagonal = Coordinate(x, y)
@@ -263,36 +263,40 @@ class Game_board:
             else:
                 break
 
+    def update_queen(self, x, y):
+        self.update_bishop(x,y)
+        self.update_rook(x, y)
+
     def update_king(self, x, y):
-        if x-1>-1 and y-1 >-1:
+        if x-1>0 and y-1 >0:
             upper_left = Coordinate(x-1, y-1)
             if self.board[x-1][y-1] == 0 or self.board[x-1][y-1].color != self.board[x][y].color:
                 self.board[x][y].available_coordinates.add(upper_left)
-        if y-1>-1:
+        if y-1>0:
             up = Coordinate(x, y-1)
             if self.board[x][y-1] == 0 or self.board[x][y-1].color != self.board[x][y].color:
                 self.board[x][y].board[x][y].available_coordinates.add(up)
-        if x+1<8 and y-1>-1:
+        if x+1<7 and y-1>0:
             upper_right = Coordinate(x+1, y-1)
             if self.board[x+1][y-1] == 0 or self.board[x+1][y-1].color != self.board[x][y].color:
                 self.board[x][y].available_coordinates.add(upper_right)
-        if x-1>-1:
+        if x-1>0:
             left = Coordinate(x-1, y)
             if self.board[x-1][y] == 0 or self.board[x-1][y].color != self.board[x][y].color:
                 self.board[x][y].available_coordinates.add(left)
-        if x+1<8:
+        if x+1<7:
             right = Coordinate(x+1, y)
             if self.board[x+1][y] == 0 or self.board[x+1][y].color != self.board[x][y].color:
                 self.board[x][y].available_coordinates.add(right)
-        if x-1>-1 and y+1<8:
+        if x-1>0 and y+1<7:
             lower_left = Coordinate(x-1, y+1)
             if self.board[x-1][y+1] == 0 or self.board[x-1][y+1].color != self.board[x][y].color:
                 self.board[x][y].available_coordinates.add(lower_left)
-        if x+1<8 and y+1<8:
+        if x+1<7 and y+1<7:
             lower_right = Coordinate(x+1, y+1)
             if self.board[x+1][y+1] == 0 or self.board[x+1][y+1].color != self.board[x][y].color:
                 self.board[x][y].available_coordinates.add(lower_right)
-        if y+1<8:
+        if y+1<7:
             down = Coordinate(x, y+1)
             if self.board[x][y+1] == 0 or self.board[x][y+1].color != self.board[x][y].color:
                 self.board[x][y].available_coordinates.add(down)
