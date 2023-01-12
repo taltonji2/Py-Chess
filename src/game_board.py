@@ -268,35 +268,35 @@ class Game_board:
         self.update_rook(x, y)
 
     def update_king(self, x, y):
-        if x-1>0 and y-1 >0:
+        if x-1>=0 and y-1 >=0:
             upper_left = Coordinate(x-1, y-1)
             if self.board[x-1][y-1] == 0 or self.board[x-1][y-1].color != self.board[x][y].color:
                 self.board[x][y].available_coordinates.add(upper_left)
-        if y-1>0:
+        if y-1>=0:
             up = Coordinate(x, y-1)
             if self.board[x][y-1] == 0 or self.board[x][y-1].color != self.board[x][y].color:
                 self.board[x][y].board[x][y].available_coordinates.add(up)
-        if x+1<7 and y-1>0:
+        if x+1<=7 and y-1>=0:
             upper_right = Coordinate(x+1, y-1)
             if self.board[x+1][y-1] == 0 or self.board[x+1][y-1].color != self.board[x][y].color:
                 self.board[x][y].available_coordinates.add(upper_right)
-        if x-1>0:
+        if x-1>=0:
             left = Coordinate(x-1, y)
             if self.board[x-1][y] == 0 or self.board[x-1][y].color != self.board[x][y].color:
                 self.board[x][y].available_coordinates.add(left)
-        if x+1<7:
+        if x+1<=7:
             right = Coordinate(x+1, y)
             if self.board[x+1][y] == 0 or self.board[x+1][y].color != self.board[x][y].color:
                 self.board[x][y].available_coordinates.add(right)
-        if x-1>0 and y+1<7:
+        if x-1>=0 and y+1<=7:
             lower_left = Coordinate(x-1, y+1)
             if self.board[x-1][y+1] == 0 or self.board[x-1][y+1].color != self.board[x][y].color:
                 self.board[x][y].available_coordinates.add(lower_left)
-        if x+1<7 and y+1<7:
+        if x+1<=7 and y+1<=7:
             lower_right = Coordinate(x+1, y+1)
             if self.board[x+1][y+1] == 0 or self.board[x+1][y+1].color != self.board[x][y].color:
                 self.board[x][y].available_coordinates.add(lower_right)
-        if y+1<7:
+        if y+1<=7:
             down = Coordinate(x, y+1)
             if self.board[x][y+1] == 0 or self.board[x][y+1].color != self.board[x][y].color:
                 self.board[x][y].available_coordinates.add(down)
