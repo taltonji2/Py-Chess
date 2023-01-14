@@ -1,7 +1,5 @@
 from coordinate import Coordinate
-from abc import ABC, abstractmethod
-
-from game_board import Game_board
+from abc import ABC
 
 class Piece(ABC):
     def __init__(self, color, coordinate):
@@ -80,32 +78,6 @@ class King(Piece):
     def __init__(self, color, coordinate) -> None:
         super().__init__(color, coordinate)
     
-    def castle_check(self, gb : Game_board):
-        # The king and rook involved in castling must not have previously moved;
-        if self.color == "black" and self.moved == False:
-            for i in range(1,3):
-                if gb.board[self.coordinate.x+i][self.coordinate.y] != 0:
-                    return False
-            for j in range(3):
-                for cord in gb.color_index[self.coordinate.x+j][self.coordinate.y][1]:
-                    if cord.color != "black":
-                        return False
-            rook = gb.board[self.coordinate.x+3][self.coordinate.y]
-            if isinstance(rook, Rook) and rook.color == "black" and rook.moved == False:
-                return True
-                
-        if self.color == "white" and self.moved == False:
-            for i in range(1,3):
-                if gb.board[self.coordinate.x-i][self.coordinate.y] != 0:
-                    return False
-            for j in range(3):
-                for cord in gb.color_index[self.coordinate.x-j][self.coordinate.y][1]:
-                    if cord.color != "black":
-                        return False
-            rook = gb.board[self.coordinate.x+3][self.coordinate.y]
-            if isinstance(rook, Rook) and rook.color == "black" and rook.moved == False:
-                return True
-        
-        return False
+    
         
        

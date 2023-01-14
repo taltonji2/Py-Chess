@@ -13,9 +13,9 @@ class Game_board:
         for y in range(8):
             for x in range(8): 
                 if whiteside:
-                    self.color_index[x][y] = ['white',[]]
+                    self.color_index[x][y] = ['white',set()]
                 else:
-                    self.color_index[x][y] = ['black',[]]
+                    self.color_index[x][y] = ['black',set()]
                 
             whiteside = not whiteside
             x = 0
@@ -63,7 +63,7 @@ class Game_board:
                     self.board[x][y] = Rook('black', Coordinate(x,y))
         
         self.update_available_moves()
-    
+        
     def update_pawn(self, x, y):
         if(self.board[x][y].color == 'black'):
             if (x-1 >= 0 and y-1 >= 0):
@@ -184,59 +184,74 @@ class Game_board:
         down_right = Coordinate(x+1, y+2)
         
         if x-1>=0 and y-2>=0:
-            if self.board[x-1][y-2] == 0:
+            if isinstance(self.board[x-1][y-2], Piece):
+                if self.board[x-1][y-2].color != self.board[x][y].color:
+                    self.board[x][y].available_coordinates.add(up_left)
+                    self.color_index[up_left.x][up_left.y][1].add(Coordinate(x,y))
+            else:
                 self.board[x][y].available_coordinates.add(up_left)
                 self.color_index[up_left.x][up_left.y][1].add(Coordinate(x,y))
-            if self.board[x-1][y-2] != 0 and self.board[x-1][y-2].color != self.board[x][y].color:
-               self.board[x][y].available_coordinates.add(up_left)
-               self.color_index[up_left.x][up_left.y][1].add(Coordinate(x,y))
+            
         if x+1<=7 and y-2>=0:
-            if self.board[x+1][y-2] == 0:
+            if isinstance(self.board[x+1][y-2], Piece):
+                if self.board[x+1][y-2].color != self.board[x][y].color:
+                    self.board[x][y].available_coordinates.add(up_right)
+                    self.color_index[up_right.x][up_right.y][1].add(Coordinate(x,y))
+            else:
                 self.board[x][y].available_coordinates.add(up_right)
                 self.color_index[up_right.x][up_right.y][1].add(Coordinate(x,y))
-            if self.board[x+1][y-2] != 0 and self.board[x-1][y-2].color != self.board[x][y].color:
-                self.board[x][y].available_coordinates.add(up_right)
-                self.color_index[up_right.x][up_right.y][1].add(Coordinate(x,y))
+            
         if x-2>=0 and y-1>=0:
-            if self.board[x-2][y-1] == 0:
+            if isinstance(self.board[x-2][y-1], Piece):
+                if self.board[x-2][y-1].color != self.board[x][y].color:
+                    self.board[x][y].available_coordinates.add(left_up)
+                    self.color_index[left_up.x][left_up.y][1].add(Coordinate(x,y))
+            else:
                 self.board[x][y].available_coordinates.add(left_up)
                 self.color_index[left_up.x][left_up.y][1].add(Coordinate(x,y))
-            if self.board[x-2][y-1] != 0 and self.board[x-2][y-1].color != self.board[x][y].color:
-                self.board[x][y].available_coordinates.add(left_up)
-                self.color_index[left_up.x][left_up.y][1].add(Coordinate(x,y))
+            
         if x-2>=0 and y+1<=7:
-            if self.board[x-2][y+1] == 0:
+            if isinstance(self.board[x-2][y+1], Piece):
+                if self.board[x-2][y+1].color != self.board[x][y].color:
+                    self.board[x][y].available_coordinates.add(left_down)
+                    self.color_index[left_down.x][left_down.y][1].add(Coordinate(x,y))
+            else: 
                 self.board[x][y].available_coordinates.add(left_down)
                 self.color_index[left_down.x][left_down.y][1].add(Coordinate(x,y))
-            if self.board[x-2][y+1] != 0 and self.board[x-2][y+1].color != self.board[x][y].color:
-                self.board[x][y].available_coordinates.add(left_down)
-                self.color_index[left_down.x][left_down.y][1].add(Coordinate(x,y))
+
         if x+2<=7 and y-1>=0:
-            if self.board[x+2][y-1] == 0:
+            if isinstance(self.board[x+2][y-1], Piece):
+                if self.board[x+2][y-1].color != self.board[x][y].color:
+                    self.board[x][y].available_coordinates.add(right_up)
+                    self.color_index[right_up.x][right_up.y][1].add(Coordinate(x,y))
+            else:
                 self.board[x][y].available_coordinates.add(right_up)
                 self.color_index[right_up.x][right_up.y][1].add(Coordinate(x,y))
-            if self.board[x+2][y-1] != 0 and self.board[x+2][y-1].color != self.board[x][y].color:
-                self.board[x][y].available_coordinates.add(right_up)
-                self.color_index[right_up.x][right_up.y][1].add(Coordinate(x,y))
+            
         if x+2<=7 and y+1<=7:
-            if self.board[x+2][y+1] == 0:
+            if isinstance(self.board[x+2][y+1], Piece):
+                if self.board[x+2][y+1].color != self.board[x][y].color:
+                    self.board[x][y].available_coordinates.add(right_down)
+                    self.color_index[right_down.x][right_down.y][1].add(Coordinate(x,y))
+            else:
                 self.board[x][y].available_coordinates.add(right_down)
                 self.color_index[right_down.x][right_down.y][1].add(Coordinate(x,y))
-            if self.board[x+2][y+1] != 0 and self.board[x+2][y+1].color != self.board[x][y].color:
-                self.board[x][y].available_coordinates.add(right_down)
-                self.color_index[right_down.x][right_down.y][1].add(Coordinate(x,y))
+
         if x-1>=0 and y+2<=7:
-            if self.board[x-1][y+2] == 0:
+            if isinstance(self.board[x-1][y+2], Piece):
+                if self.board[x-1][y+2].color != self.board[x][y].color:
+                    self.board[x][y].available_coordinates.add(down_left)
+                    self.color_index[down_left.x][down_left.y][1].add(Coordinate(x,y))
+            else: 
                 self.board[x][y].available_coordinates.add(down_left)
                 self.color_index[down_left.x][down_left.y][1].add(Coordinate(x,y))
-            if self.board[x-1][y+2] != 0 and self.board[x-1][y+2].color != self.board[x][y].color:
-                self.board[x][y].available_coordinates.add(down_left)
-                self.color_index[down_left.x][down_left.y][1].add(Coordinate(x,y))
+
         if x+1<=7 and y+2<=7:
-            if self.board[x+1][y+2] == 0:
-                self.board[x][y].available_coordinates.add(down_right)
-                self.color_index[down_right.x][down_right.y][1].add(Coordinate(x,y))
-            if self.board[x+1][y+2] != 0 and self.board[x+1][y+2].color != self.board[x][y].color:
+            if isinstance(self.board[x+1][y+2], Piece):
+                if self.board[x+1][y+2].color != self.board[x][y].color:
+                    self.board[x][y].available_coordinates.add(down_right)
+                    self.color_index[down_right.x][down_right.y][1].add(Coordinate(x,y))
+            else: 
                 self.board[x][y].available_coordinates.add(down_right)
                 self.color_index[down_right.x][down_right.y][1].add(Coordinate(x,y))
     
@@ -244,69 +259,73 @@ class Game_board:
         original_x = x
         original_y = y
         
-        while x >= 0 and y >= 0:
+        while x > 0 and y > 0:
             x -= 1
             y -= 1
             up_left_diagonal = Coordinate(x, y)
-            if self.board[x][y] == 0:
-                self.board[x][y].available_coordinates.add(up_left_diagonal)
-                self.color_index[x][y][1].add(Coordinate(original_x,original_y))
-            elif self.board[x][y].color != self.board[original_x][original_y].color:
-                self.board[x][y].available_coordinates.add(up_left_diagonal)
-                self.color_index[x][y][1].add(Coordinate(original_x,original_y))
-                break
+            if isinstance(self.board[x][y], Piece):
+                if self.board[x][y].color != self.board[original_x][original_y].color:
+                    self.board[original_x][original_y].available_coordinates.add(up_left_diagonal)
+                    self.color_index[x][y][1].add(Coordinate(original_x,original_y))
+                    break
+                else:
+                    break
             else:
-                break
+                self.board[original_x][original_y].available_coordinates.add(up_left_diagonal)
+                self.color_index[x][y][1].add(Coordinate(original_x,original_y))
         
         x = original_x
         y = original_y
         
-        while x+1 <= 7 and y-1 >= 0:
+        while x+1 < 7 and y-1 > 0:
             x += 1
             y -= 1
             up_right_diagonal = Coordinate(x, y)
-            if self.board[x][y] == 0:
-                self.board[x][y].available_coordinates.add(up_right_diagonal)
-                self.color_index[x][y][1].add(Coordinate(original_x,original_y))
-            elif self.board[x][y].color != self.board[original_x][original_y].color:
-                self.board[x][y].available_coordinates.add(up_right_diagonal)
-                self.color_index[x][y][1].add(Coordinate(original_x,original_y))
-                break
+            if isinstance(self.board[x][y], Piece):
+                if self.board[x][y].color != self.board[original_x][original_y].color:
+                    self.board[original_x][original_y].available_coordinates.add(up_right_diagonal)
+                    self.color_index[x][y][1].add(Coordinate(original_x,original_y))
+                    break
+                else:
+                    break
             else:
-                break
+                self.board[original_x][original_y].available_coordinates.add(up_right_diagonal)
+                self.color_index[x][y][1].add(Coordinate(original_x,original_y))
         
         x = original_x
         y = original_y
 
-        while x-1 >= 0 and y+1 <= 7:
+        while x-1 > 0 and y+1 < 7:
             x = x - 1
             y = y + 1
             down_left_diagonal = Coordinate(x, y)
-            if self.board[x][y] == 0:
-                self.board[x][y].available_coordinates.add(down_left_diagonal)
-                self.color_index[x][y][1].add(Coordinate(original_x,original_y))
-            elif self.board[x][y].color != self.board[original_x][original_y].color:
-                self.board[x][y].available_coordinates.add(down_left_diagonal)
-                self.color_index[x][y][1].add(Coordinate(original_x,original_y))
-                break
+            if isinstance(self.board[x][y], Piece):
+                if self.board[x][y].color != self.board[original_x][original_y].color:
+                    self.board[original_x][original_y].available_coordinates.add(down_left_diagonal)
+                    self.color_index[x][y][1].add(Coordinate(original_x,original_y))
+                    break
+                else:
+                    break
             else:
-                break
+                self.board[original_x][original_y].available_coordinates.add(down_left_diagonal)
+                self.color_index[x][y][1].add(Coordinate(original_x,original_y))
         
         x = original_x
         y = original_y
-        while x+1 <= 7 and y+1 <= 7:
+        while x+1 < 7 and y+1 < 7:
             x += 1
             y += 1
             down_right_diagonal = Coordinate(x, y)
-            if self.board[x][y] == 0:
-                self.board[x][y].available_coordinates.add(down_right_diagonal)
-                self.color_index[x][y][1].add(Coordinate(original_x,original_y))
-            if self.board[x][y] != 0 and self.board[x][y].color != self.board[original_x][original_y].color:
-                self.board[x][y].available_coordinates.add(down_right_diagonal)
-                self.color_index[x][y][1].add(Coordinate(original_x,original_y))
-                break
+            if isinstance(self.board[x][y], Piece):
+                if self.board[x][y].color != self.board[original_x][original_y].color:
+                    self.board[original_x][original_y].available_coordinates.add(down_right_diagonal)
+                    self.color_index[x][y][1].add(Coordinate(original_x,original_y))
+                    break
+                else:
+                    break
             else:
-                break
+                self.board[original_x][original_y].available_coordinates.add(down_right_diagonal)
+                self.color_index[x][y][1].add(Coordinate(original_x,original_y))
 
     def update_queen(self, x, y):
         self.update_bishop(x,y)
@@ -349,7 +368,7 @@ class Game_board:
     def update_available_moves(self):
         for x in range(8):
                 for y in range(8):
-                    self.color_index[1].clear()
+                    self.color_index[x][y][1].clear()
                     if isinstance(self.board[x][y], Piece):
                         if type(self.board[x][y]) is int:
                             continue
@@ -382,6 +401,34 @@ class Game_board:
         for coordinate in self.board[x1][y1].available_coordinates:
             if coordinate.x == x2 and coordinate.y == y2:
                 return True
+        return False
+
+    def check_castle(self, piece : King):
+        # The king and rook involved in castling must not have previously moved;
+        if piece.color == "black" and piece.moved == False:
+            for i in range(1,3):
+                if self.board[piece.coordinate.x+i][piece.coordinate.y] != 0:
+                    return False
+            for j in range(3):
+                for cord in self.color_index[piece.coordinate.x+j][piece.coordinate.y][1]:
+                    if cord.color != "black":
+                        return False
+            rook = self.board[piece.coordinate.x+3][piece.coordinate.y]
+            if isinstance(rook, Rook) and rook.color == "black" and rook.moved == False:
+                return True
+                
+        if piece.color == "white" and piece.moved == False:
+            for i in range(1,3):
+                if self.board[piece.coordinate.x-i][piece.coordinate.y] != 0:
+                    return False
+            for j in range(3):
+                for cord in self.color_index[piece.coordinate.x-j][piece.coordinate.y][1]:
+                    if cord.color != "black":
+                        return False
+            rook = self.board[piece.coordinate.x+3][piece.coordinate.y]
+            if isinstance(rook, Rook) and rook.color == "black" and rook.moved == False:
+                return True
+        
         return False
 
     
