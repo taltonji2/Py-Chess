@@ -19,8 +19,7 @@ def print_game_board():
         i-=1
     print("\n   ", end='')
     for i in range(8):
-        print(f"{chr(c+i).lower()}", end='  ')
-            
+        print(f"{chr(c+i).lower()}", end='  ')       
 
 def start_prompt():
     print("white or black? ")
@@ -30,6 +29,15 @@ def start_prompt():
     else:
         print("please make a valid selection.")
         start_prompt()
+
+def translate_move(move:list):
+    letter_array = ['a','b','c','d','e','f','g','h']
+    new_move = []
+    for position in move:
+        x = letter_array.index(position[0])
+        y = 8 - int(position[1])
+        new_move.append([x,y])
+    return new_move
 
 def check_move_input():
     move = input().lower()
@@ -68,16 +76,6 @@ def invalid_move(message):
     print("what will it be? ")
     check_move_input()
 
-def translate_move(move:list):
-    letter_array = ['a','b','c','d','e','f','g','h']
-    new_move = []
-    for position in move:
-        x = letter_array.index(position[0])
-        y = 8 - int(position[1])
-        new_move.append([x,y])
-    return new_move
-
-
 def game_loop():
     print_game_board()
     while gb.active_player != None:
@@ -89,7 +87,6 @@ def game_loop():
         else:
             gb.active_player = 'white'
             
-
 def start():
     start_prompt()
     game_loop()

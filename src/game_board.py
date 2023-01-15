@@ -5,8 +5,11 @@ class Game_board:
     color_index = [[0 for x in range(8)] for y in range(8)]
     board = [[0 for x in range(8)] for y in range(8)]
     active_player = 'white'
-    checkmate_w = None
-    cehckmate_b = None
+    checkmate_w = False
+    checkmate_b = False
+    castle_w = False
+    castle_b = False
+    castling = False
     
     def __init__(self) -> None:
         whiteside = True
@@ -23,49 +26,50 @@ class Game_board:
         for y in range(2):
             for x in range(8):
                 if y == 1: 
-                    self.board[x][y] = Pawn('white', Coordinate(x,y))
+                    self.board[x][y] = Pawn('black', Coordinate(x,y))
                 if x == 0 and y ==0:
-                    self.board[x][y] = Rook('white', Coordinate(x,y))
+                    self.board[x][y] = Rook('black', Coordinate(x,y))
                 if x == 1 and y ==0:
-                    self.board[x][y] = Knight('white', Coordinate(x,y))
+                    self.board[x][y] = Knight('black', Coordinate(x,y))
                 if x == 2 and y ==0:
-                    self.board[x][y] = Bishop('white', Coordinate(x,y))
+                    self.board[x][y] = Bishop('black', Coordinate(x,y))
                 if x == 3 and y ==0:
-                    self.board[x][y] = Queen('white', Coordinate(x,y))
+                    self.board[x][y] = Queen('black', Coordinate(x,y))
                 if x == 4 and y ==0:
-                    self.board[x][y] = King('white', Coordinate(x,y))
-                if x == 5 and y ==0:
-                    self.board[x][y] = Bishop('white', Coordinate(x,y))
-                if x == 6 and y ==0:
-                    self.board[x][y] = Knight('white', Coordinate(x,y))
+                    self.board[x][y] = King('black', Coordinate(x,y))
+                # if x == 5 and y ==0:
+                #     self.board[x][y] = Bishop('black', Coordinate(x,y))
+                # if x == 6 and y ==0:
+                #     self.board[x][y] = Knight('black', Coordinate(x,y))
                 if x == 7 and y ==0:
-                    self.board[x][y] = Rook('white', Coordinate(x,y))
+                    self.board[x][y] = Rook('black', Coordinate(x,y))
         
         for y in range(6,8):
             for x in range(8):
                 if y == 6: 
-                    self.board[x][y] = Pawn('black', Coordinate(x,y))
+                    self.board[x][y] = Pawn('white', Coordinate(x,y))
                 if x == 0 and y ==7:
-                    self.board[x][y] = Rook('black', Coordinate(x,y))
-                if x == 1 and y ==7:
-                    self.board[x][y] = Knight('black', Coordinate(x,y))
-                if x == 2 and y ==7:
-                    self.board[x][y] = Bishop('black', Coordinate(x,y))
-                if x == 3 and y ==7:
-                    self.board[x][y] = Queen('black', Coordinate(x,y))
+                    self.board[x][y] = Rook('white', Coordinate(x,y))
+                # if x == 1 and y ==7:
+                #     self.board[x][y] = Knight('white', Coordinate(x,y))
+                # if x == 2 and y ==7:
+                #     self.board[x][y] = Bishop('white', Coordinate(x,y))
+                # if x == 3 and y ==7:
+                #     self.board[x][y] = Queen('white', Coordinate(x,y))
                 if x == 4 and y ==7:
-                    self.board[x][y] = King('black', Coordinate(x,y))
+                    self.board[x][y] = King('white', Coordinate(x,y))
                 if x == 5 and y ==7:
-                    self.board[x][y] = Bishop('black', Coordinate(x,y))
+                    self.board[x][y] = Bishop('white', Coordinate(x,y))
                 if x == 6 and y ==7:
-                    self.board[x][y] = Knight('black', Coordinate(x,y))
+                    self.board[x][y] = Knight('white', Coordinate(x,y))
                 if x == 7 and y ==7:
-                    self.board[x][y] = Rook('black', Coordinate(x,y))
+                    self.board[x][y] = Rook('white', Coordinate(x,y))
         
         self.update_available_moves()
-        
+
+
     def update_pawn(self, x, y):
-        if(self.board[x][y].color == 'black'):
+        if(self.board[x][y].color == 'white'):
             if (x-1 >= 0 and y-1 >= 0):
                 upper_left_coordinate = Coordinate(x-1, y-1)
                 if (self.board[x-1][y-1] == 0):
@@ -117,7 +121,7 @@ class Game_board:
                     self.board[x][y].available_coordinates.add(lower_right_coordinate)
                     self.color_index[x+1][y+1][1].add(Coordinate(x,y))
                
-        
+
     def update_rook(self, x, y):
         left_coordinate = Coordinate(x-1, y)
         while left_coordinate.x >= 0:
@@ -171,7 +175,6 @@ class Game_board:
                 break
             down_coordinate.y = down_coordinate.y + 1
 
-        
 
     def update_knight(self, x, y):
         up_left = Coordinate(x-1,y-2)
@@ -339,7 +342,7 @@ class Game_board:
         if y-1>=0:
             up = Coordinate(x, y-1)
             if self.board[x][y-1] == 0 or self.board[x][y-1].color != self.board[x][y].color:
-                self.board[x][y].board[x][y].available_coordinates.add(up)
+                self.board[x][y].available_coordinates.add(up)
         if x+1<=7 and y-1>=0:
             upper_right = Coordinate(x+1, y-1)
             if self.board[x+1][y-1] == 0 or self.board[x+1][y-1].color != self.board[x][y].color:
@@ -393,42 +396,101 @@ class Game_board:
                             self.update_bishop(x, y)
     
     def move_piece(self, x1, y1, x2, y2):
-        self.board[x1][y1].move(x2, y2)
-        self.board[x2][y2] = self.board[x1][y1]
-        self.board[x1][y1] = 0
+        def move(x1, y1, x2, y2):
+            self.board[x1][y1].move(x2, y2)
+            self.board[x2][y2] = self.board[x1][y1]
+            self.board[x1][y1] = 0
+
+        def castle():
+                move(x1, y1, x2, y2)
+                if (x2 == 2):
+                    move(0,y2,3,y2)
+                else:
+                    move(7,y2,5,y2)
+        
+        if (self.castling):
+            castle()
+            self.castling = False
+        else: 
+            move(x1,y1,x2,y2)
 
     def is_a_move(self, x1, y1, x2, y2):
-        for coordinate in self.board[x1][y1].available_coordinates:
-            if coordinate.x == x2 and coordinate.y == y2:
-                return True
-        return False
+        if isinstance(self.board[x1][y1], King):
+            if self.board[x1][y1].color == "white" and (x2 == x1+2 or x2 == x1-2) and y2 == y1 and self.castle_w == False:
+                if self.check_castle(self.board[x1][y1]):
+                    self.castle_w = True
+                    self.castling = True
+                    return True
+            if self.board[x1][y1].color == "black" and (x2 == x1-2 or x2 == x1+2) and y2 == y1 and self.castle_b == False:
+                if self.check_castle(self.board[x1][y1]):
+                    self.castle_b = True
+                    self.castling = True
+                    return True
+        else:
+            for coordinate in self.board[x1][y1].available_coordinates:
+                if coordinate.x == x2 and coordinate.y == y2:
+                    return True
+            return False
 
     def check_castle(self, piece : King):
         # The king and rook involved in castling must not have previously moved;
         if piece.color == "black" and piece.moved == False:
-            for i in range(1,3):
-                if self.board[piece.coordinate.x+i][piece.coordinate.y] != 0:
-                    return False
-            for j in range(3):
-                for cord in self.color_index[piece.coordinate.x+j][piece.coordinate.y][1]:
-                    if cord.color != "black":
+            # left
+            def check_black_left ():
+                for i in range(1,4):
+                    if self.board[piece.coordinate.x-i][0] != 0:
                         return False
-            rook = self.board[piece.coordinate.x+3][piece.coordinate.y]
-            if isinstance(rook, Rook) and rook.color == "black" and rook.moved == False:
-                return True
+                for j in range(5):
+                    for cord in self.color_index[piece.coordinate.x-j][0][1]:
+                        if self.board[cord.x][cord.y].color == "white":
+                            return False
+                rook = self.board[piece.coordinate.x-4][0]
+                if isinstance(rook, Rook) and rook.color == "black" and rook.moved == False:
+                    return True
+            
+            def check_black_right():
+                for i in range(1,3):
+                    if self.board[piece.coordinate.x+i][0] != 0:
+                        return False
+                for j in range(4):
+                    for cord in self.color_index[piece.coordinate.x+j][0][1]:
+                        if self.board[cord.x][cord.y].color == "white":
+                            return False
+                rook = self.board[piece.coordinate.x+3][0]
+                if isinstance(rook, Rook) and rook.color == "black" and rook.moved == False:
+                    return True
+            left = check_black_left()
+            right = check_black_right()
+            return left or right
+            
                 
-        if piece.color == "white" and piece.moved == False:
-            for i in range(1,3):
-                if self.board[piece.coordinate.x-i][piece.coordinate.y] != 0:
-                    return False
-            for j in range(3):
-                for cord in self.color_index[piece.coordinate.x-j][piece.coordinate.y][1]:
-                    if cord.color != "black":
+        if piece.color == "white" and piece.moved == False and self.castle_w == False:
+            
+            def check_white_left ():
+                for i in range(1,4):
+                    if self.board[piece.coordinate.x-i][7] != 0:
                         return False
-            rook = self.board[piece.coordinate.x+3][piece.coordinate.y]
-            if isinstance(rook, Rook) and rook.color == "black" and rook.moved == False:
-                return True
-        
-        return False
+                for j in range(5):
+                    for cord in self.color_index[piece.coordinate.x-j][7][1]:
+                        if self.board[cord.x][cord.y].color != "black":
+                            return False
+                rook = self.board[piece.coordinate.x-4][7]
+                if isinstance(rook, Rook) and rook.color == "white"  and rook.moved == False:
+                    return True
 
+            def check_white_right():
+                for i in range(1,3):
+                    if self.board[piece.coordinate.x+i][7] != 0:
+                        return False
+                for j in range(4):
+                    for cord in self.color_index[piece.coordinate.x+j][7][1]:
+                        if self.board[cord.x][cord.y].color == "black":
+                            return False
+                rook = self.board[piece.coordinate.x+3][7]
+                if isinstance(rook, Rook) and rook.color == "white" and rook.moved == False:
+                    return True
+            
+            left = check_white_left()
+            right = check_white_right()
+            return left or right
     
