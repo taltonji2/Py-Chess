@@ -2,23 +2,27 @@ from pieces import Pawn, Piece, Rook, Knight, Bishop, Queen, King
 from coordinate import Coordinate
 
 class Game_board:
-    color_index = [[0 for x in range(8)] for y in range(8)]
-    board = [[0 for x in range(8)] for y in range(8)]
-    active_player = 'white'
-    checkmate_w = False
-    checkmate_b = False
-    castle_w = False
-    castle_b = False
-    castling = False
+    idx_under_attack : list = [[0 for x in range(8)] for y in range(8)]
+    board : list = [[0 for x in range(8)] for y in range(8)]
+    active_player : str = 'white'
+    white_king : Piece = None
+    black_king : Piece = None
+    temp_piece : Piece = None
+    check_w : bool = False
+    check_b : bool = False
+    castle_w : bool = False
+    castle_b : bool = False
+    castling : bool = False
+
     
     def __init__(self) -> None:
         whiteside = True
         for y in range(8):
             for x in range(8): 
                 if whiteside:
-                    self.color_index[x][y] = ['white',set()]
+                    self.idx_under_attack[x][y] = ['white',set()]
                 else:
-                    self.color_index[x][y] = ['black',set()]
+                    self.idx_under_attack[x][y] = ['black',set()]
                 
             whiteside = not whiteside
             x = 0
@@ -74,52 +78,52 @@ class Game_board:
                 upper_left_coordinate = Coordinate(x-1, y-1)
                 if (self.board[x-1][y-1] == 0):
                     self.board[x][y].available_coordinates.add(upper_left_coordinate)
-                    self.color_index[x-1][y-1][1].add(Coordinate(x,y))
+                    self.idx_under_attack[x-1][y-1][1].add(Coordinate(x,y))
                 elif (isinstance(self.board[x-1][y-1], Piece) and self.board[x-1][y-1].color != self.board[x][y].color):
                     self.board[x][y].available_coordinates.add(upper_left_coordinate)
-                    self.color_index[x-1][y-1][1].add(Coordinate(x,y))
+                    self.idx_under_attack[x-1][y-1][1].add(Coordinate(x,y))
             if (y-2 >= 0 and self.board[x][y-2] == 0 and y == 6):
                 up_up_coordinate = Coordinate(x, y-2)
                 self.board[x][y].available_coordinates.add(up_up_coordinate)
-                self.color_index[x][y-2][1].add(Coordinate(x,y))
+                self.idx_under_attack[x][y-2][1].add(Coordinate(x,y))
             if (y-1 >= 0 and self.board[x][y-1] == 0):
                 up_coordinate = Coordinate(x, y-1)
                 self.board[x][y].available_coordinates.add(up_coordinate)
-                self.color_index[x][y-1][1].add(Coordinate(x,y))
+                self.idx_under_attack[x][y-1][1].add(Coordinate(x,y))
             if (x+1 <= 7 and y-1 >= 0):
                 upper_right_coordinate = Coordinate(x+1, y-1)
                 if self.board[x-1][y-1] == 0:
                     self.board[x][y].available_coordinates.add(upper_right_coordinate)
-                    self.color_index[x-1][y-1][1].add(Coordinate(x,y))
+                    self.idx_under_attack[x-1][y-1][1].add(Coordinate(x,y))
                 elif isinstance(self.board[x+1][y-1], Piece) and self.board[x+1][y-1].color != self.board[x][y].color:
                     self.board[x][y].available_coordinates.add(upper_right_coordinate)
-                    self.color_index[x+1][y-1][1].add(Coordinate(x,y))
+                    self.idx_under_attack[x+1][y-1][1].add(Coordinate(x,y))
                     
         else:
             if (x-1 >= 0 and y+1 <= 7):
                 lower_left_coordinate = Coordinate(x-1, y+1)
                 if (self.board[x-1][y+1] == 0):
                     self.board[x][y].available_coordinates.add(lower_left_coordinate)
-                    self.color_index[x-1][y+1][1].add(Coordinate(x,y))
+                    self.idx_under_attack[x-1][y+1][1].add(Coordinate(x,y))
                 elif (isinstance(self.board[x-1][y+1], Piece) and self.board[x-1][y+1].color != self.board[x][y].color):
                     self.board[x][y].available_coordinates.add(lower_left_coordinate)
-                    self.color_index[x-1][y+1][1].add(Coordinate(x,y))
+                    self.idx_under_attack[x-1][y+1][1].add(Coordinate(x,y))
             if (y+2 <= 7 and self.board[x][y+2] == 0 and y == 1):
                 down_down_coordinate = Coordinate(x, y+2)
                 self.board[x][y].available_coordinates.add(down_down_coordinate)
-                self.color_index[x][y+2][1].add(Coordinate(x,y))
+                self.idx_under_attack[x][y+2][1].add(Coordinate(x,y))
             if (y+1 <= 7 and self.board[x][y+1] == 0):
                 down_coordinate = Coordinate(x, y+1)
                 self.board[x][y].available_coordinates.add(down_coordinate)
-                self.color_index[x][y+1][1].add(Coordinate(x,y))
+                self.idx_under_attack[x][y+1][1].add(Coordinate(x,y))
             if (x+1 <= 7 and y+1 <= 7):
                 lower_right_coordinate = Coordinate(x+1, y+1)
                 if self.board[x+1][y+1] == 0:
                     self.board[x][y].available_coordinates.add(lower_right_coordinate)
-                    self.color_index[x+1][y+1][1].add(Coordinate(x,y))
+                    self.idx_under_attack[x+1][y+1][1].add(Coordinate(x,y))
                 elif isinstance(self.board[x+1][y+1], Piece) and self.board[x+1][y+1].color != self.board[x][y].color:
                     self.board[x][y].available_coordinates.add(lower_right_coordinate)
-                    self.color_index[x+1][y+1][1].add(Coordinate(x,y))
+                    self.idx_under_attack[x+1][y+1][1].add(Coordinate(x,y))
                
 
     def update_rook(self, x, y):
@@ -127,12 +131,12 @@ class Game_board:
         while left_coordinate.x >= 0:
             if self.board[left_coordinate.x][left_coordinate.y] == 0:
                 self.board[x][y].available_coordinates.add(Coordinate(left_coordinate.x, left_coordinate.y))
-                self.color_index[left_coordinate.x][y][1].add(Coordinate(x,y))
+                self.idx_under_attack[left_coordinate.x][y][1].add(Coordinate(x,y))
             elif self.board[left_coordinate.x][left_coordinate.y].color == self.board[x][y].color:
                 break
             else: 
                 self.board[x][y].available_coordinates.add(Coordinate(left_coordinate.x, left_coordinate.y))
-                self.color_index[left_coordinate.x][y][1].add(Coordinate(x,y))
+                self.idx_under_attack[left_coordinate.x][y][1].add(Coordinate(x,y))
                 break
             left_coordinate.x = left_coordinate.x - 1
         
@@ -140,12 +144,12 @@ class Game_board:
         while right_coordinate.x <= 7:
             if self.board[right_coordinate.x][right_coordinate.y] == 0:
                 self.board[x][y].available_coordinates.add(Coordinate(right_coordinate.x, right_coordinate.y))
-                self.color_index[right_coordinate.x][y][1].add(Coordinate(x,y))
+                self.idx_under_attack[right_coordinate.x][y][1].add(Coordinate(x,y))
             elif self.board[right_coordinate.x][right_coordinate.y].color == self.board[x][y].color:
                 break
             else: 
                 self.board[x][y].available_coordinates.add(Coordinate(right_coordinate.x, right_coordinate.y))
-                self.color_index[right_coordinate.x][y][1].add(Coordinate(x,y))
+                self.idx_under_attack[right_coordinate.x][y][1].add(Coordinate(x,y))
                 break
             right_coordinate.x = right_coordinate.x + 1
         
@@ -153,12 +157,12 @@ class Game_board:
         while up_coordinate.y >= 0:
             if self.board[up_coordinate.x][up_coordinate.y] == 0:
                 self.board[x][y].available_coordinates.add(Coordinate(up_coordinate.x, up_coordinate.y))
-                self.color_index[x][up_coordinate.y][1].add(Coordinate(x,y))
+                self.idx_under_attack[x][up_coordinate.y][1].add(Coordinate(x,y))
             elif self.board[x][up_coordinate.y].color == self.board[x][y].color:
                 break
             else: 
                 self.board[x][y].available_coordinates.add(Coordinate(up_coordinate.x, up_coordinate.y))
-                self.color_index[x][up_coordinate.y][1].add(Coordinate(x,y))
+                self.idx_under_attack[x][up_coordinate.y][1].add(Coordinate(x,y))
                 break
             up_coordinate.y = up_coordinate.y-1
         
@@ -166,12 +170,12 @@ class Game_board:
         while down_coordinate.y <= 7:
             if self.board[down_coordinate.x][down_coordinate.y] == 0:
                 self.board[x][y].available_coordinates.add(Coordinate(down_coordinate.x, down_coordinate.y))
-                self.color_index[x][down_coordinate.y][1].add(Coordinate(x,y))
+                self.idx_under_attack[x][down_coordinate.y][1].add(Coordinate(x,y))
             elif self.board[x][down_coordinate.y].color == self.board[x][y].color:
                 break
             else: 
                 self.board[x][y].available_coordinates.add(Coordinate(down_coordinate.x, down_coordinate.y))
-                self.color_index[x][down_coordinate.y][1].add(Coordinate(x,y))
+                self.idx_under_attack[x][down_coordinate.y][1].add(Coordinate(x,y))
                 break
             down_coordinate.y = down_coordinate.y + 1
 
@@ -190,73 +194,73 @@ class Game_board:
             if isinstance(self.board[x-1][y-2], Piece):
                 if self.board[x-1][y-2].color != self.board[x][y].color:
                     self.board[x][y].available_coordinates.add(up_left)
-                    self.color_index[up_left.x][up_left.y][1].add(Coordinate(x,y))
+                    self.idx_under_attack[up_left.x][up_left.y][1].add(Coordinate(x,y))
             else:
                 self.board[x][y].available_coordinates.add(up_left)
-                self.color_index[up_left.x][up_left.y][1].add(Coordinate(x,y))
+                self.idx_under_attack[up_left.x][up_left.y][1].add(Coordinate(x,y))
             
         if x+1<=7 and y-2>=0:
             if isinstance(self.board[x+1][y-2], Piece):
                 if self.board[x+1][y-2].color != self.board[x][y].color:
                     self.board[x][y].available_coordinates.add(up_right)
-                    self.color_index[up_right.x][up_right.y][1].add(Coordinate(x,y))
+                    self.idx_under_attack[up_right.x][up_right.y][1].add(Coordinate(x,y))
             else:
                 self.board[x][y].available_coordinates.add(up_right)
-                self.color_index[up_right.x][up_right.y][1].add(Coordinate(x,y))
+                self.idx_under_attack[up_right.x][up_right.y][1].add(Coordinate(x,y))
             
         if x-2>=0 and y-1>=0:
             if isinstance(self.board[x-2][y-1], Piece):
                 if self.board[x-2][y-1].color != self.board[x][y].color:
                     self.board[x][y].available_coordinates.add(left_up)
-                    self.color_index[left_up.x][left_up.y][1].add(Coordinate(x,y))
+                    self.idx_under_attack[left_up.x][left_up.y][1].add(Coordinate(x,y))
             else:
                 self.board[x][y].available_coordinates.add(left_up)
-                self.color_index[left_up.x][left_up.y][1].add(Coordinate(x,y))
+                self.idx_under_attack[left_up.x][left_up.y][1].add(Coordinate(x,y))
             
         if x-2>=0 and y+1<=7:
             if isinstance(self.board[x-2][y+1], Piece):
                 if self.board[x-2][y+1].color != self.board[x][y].color:
                     self.board[x][y].available_coordinates.add(left_down)
-                    self.color_index[left_down.x][left_down.y][1].add(Coordinate(x,y))
+                    self.idx_under_attack[left_down.x][left_down.y][1].add(Coordinate(x,y))
             else: 
                 self.board[x][y].available_coordinates.add(left_down)
-                self.color_index[left_down.x][left_down.y][1].add(Coordinate(x,y))
+                self.idx_under_attack[left_down.x][left_down.y][1].add(Coordinate(x,y))
 
         if x+2<=7 and y-1>=0:
             if isinstance(self.board[x+2][y-1], Piece):
                 if self.board[x+2][y-1].color != self.board[x][y].color:
                     self.board[x][y].available_coordinates.add(right_up)
-                    self.color_index[right_up.x][right_up.y][1].add(Coordinate(x,y))
+                    self.idx_under_attack[right_up.x][right_up.y][1].add(Coordinate(x,y))
             else:
                 self.board[x][y].available_coordinates.add(right_up)
-                self.color_index[right_up.x][right_up.y][1].add(Coordinate(x,y))
+                self.idx_under_attack[right_up.x][right_up.y][1].add(Coordinate(x,y))
             
         if x+2<=7 and y+1<=7:
             if isinstance(self.board[x+2][y+1], Piece):
                 if self.board[x+2][y+1].color != self.board[x][y].color:
                     self.board[x][y].available_coordinates.add(right_down)
-                    self.color_index[right_down.x][right_down.y][1].add(Coordinate(x,y))
+                    self.idx_under_attack[right_down.x][right_down.y][1].add(Coordinate(x,y))
             else:
                 self.board[x][y].available_coordinates.add(right_down)
-                self.color_index[right_down.x][right_down.y][1].add(Coordinate(x,y))
+                self.idx_under_attack[right_down.x][right_down.y][1].add(Coordinate(x,y))
 
         if x-1>=0 and y+2<=7:
             if isinstance(self.board[x-1][y+2], Piece):
                 if self.board[x-1][y+2].color != self.board[x][y].color:
                     self.board[x][y].available_coordinates.add(down_left)
-                    self.color_index[down_left.x][down_left.y][1].add(Coordinate(x,y))
+                    self.idx_under_attack[down_left.x][down_left.y][1].add(Coordinate(x,y))
             else: 
                 self.board[x][y].available_coordinates.add(down_left)
-                self.color_index[down_left.x][down_left.y][1].add(Coordinate(x,y))
+                self.idx_under_attack[down_left.x][down_left.y][1].add(Coordinate(x,y))
 
         if x+1<=7 and y+2<=7:
             if isinstance(self.board[x+1][y+2], Piece):
                 if self.board[x+1][y+2].color != self.board[x][y].color:
                     self.board[x][y].available_coordinates.add(down_right)
-                    self.color_index[down_right.x][down_right.y][1].add(Coordinate(x,y))
+                    self.idx_under_attack[down_right.x][down_right.y][1].add(Coordinate(x,y))
             else: 
                 self.board[x][y].available_coordinates.add(down_right)
-                self.color_index[down_right.x][down_right.y][1].add(Coordinate(x,y))
+                self.idx_under_attack[down_right.x][down_right.y][1].add(Coordinate(x,y))
     
     def update_bishop(self, x, y):
         original_x = x
@@ -269,13 +273,13 @@ class Game_board:
             if isinstance(self.board[x][y], Piece):
                 if self.board[x][y].color != self.board[original_x][original_y].color:
                     self.board[original_x][original_y].available_coordinates.add(up_left_diagonal)
-                    self.color_index[x][y][1].add(Coordinate(original_x,original_y))
+                    self.idx_under_attack[x][y][1].add(Coordinate(original_x,original_y))
                     break
                 else:
                     break
             else:
                 self.board[original_x][original_y].available_coordinates.add(up_left_diagonal)
-                self.color_index[x][y][1].add(Coordinate(original_x,original_y))
+                self.idx_under_attack[x][y][1].add(Coordinate(original_x,original_y))
         
         x = original_x
         y = original_y
@@ -287,13 +291,13 @@ class Game_board:
             if isinstance(self.board[x][y], Piece):
                 if self.board[x][y].color != self.board[original_x][original_y].color:
                     self.board[original_x][original_y].available_coordinates.add(up_right_diagonal)
-                    self.color_index[x][y][1].add(Coordinate(original_x,original_y))
+                    self.idx_under_attack[x][y][1].add(Coordinate(original_x,original_y))
                     break
                 else:
                     break
             else:
                 self.board[original_x][original_y].available_coordinates.add(up_right_diagonal)
-                self.color_index[x][y][1].add(Coordinate(original_x,original_y))
+                self.idx_under_attack[x][y][1].add(Coordinate(original_x,original_y))
         
         x = original_x
         y = original_y
@@ -305,13 +309,13 @@ class Game_board:
             if isinstance(self.board[x][y], Piece):
                 if self.board[x][y].color != self.board[original_x][original_y].color:
                     self.board[original_x][original_y].available_coordinates.add(down_left_diagonal)
-                    self.color_index[x][y][1].add(Coordinate(original_x,original_y))
+                    self.idx_under_attack[x][y][1].add(Coordinate(original_x,original_y))
                     break
                 else:
                     break
             else:
                 self.board[original_x][original_y].available_coordinates.add(down_left_diagonal)
-                self.color_index[x][y][1].add(Coordinate(original_x,original_y))
+                self.idx_under_attack[x][y][1].add(Coordinate(original_x,original_y))
         
         x = original_x
         y = original_y
@@ -322,13 +326,13 @@ class Game_board:
             if isinstance(self.board[x][y], Piece):
                 if self.board[x][y].color != self.board[original_x][original_y].color:
                     self.board[original_x][original_y].available_coordinates.add(down_right_diagonal)
-                    self.color_index[x][y][1].add(Coordinate(original_x,original_y))
+                    self.idx_under_attack[x][y][1].add(Coordinate(original_x,original_y))
                     break
                 else:
                     break
             else:
                 self.board[original_x][original_y].available_coordinates.add(down_right_diagonal)
-                self.color_index[x][y][1].add(Coordinate(original_x,original_y))
+                self.idx_under_attack[x][y][1].add(Coordinate(original_x,original_y))
 
     def update_queen(self, x, y):
         self.update_bishop(x,y)
@@ -371,7 +375,7 @@ class Game_board:
     def update_available_moves(self):
         for x in range(8):
                 for y in range(8):
-                    self.color_index[x][y][1].clear()
+                    self.idx_under_attack[x][y][1].clear()
                     if isinstance(self.board[x][y], Piece):
                         if type(self.board[x][y]) is int:
                             continue
@@ -387,14 +391,18 @@ class Game_board:
                         elif type(self.board[x][y]) is Bishop:  
                             self.board[x][y].available_coordinates.clear() 
                             self.update_bishop(x, y)
-                        elif type(self.board[x][y]) is King:  
+                        elif type(self.board[x][y]) is King:
+                            if self.board[x][y].color == "white":
+                                self.white_king = self.board[x][y]
+                            else: 
+                                self.black_king = self.board[x][y]
                             self.board[x][y].available_coordinates.clear() 
                             self.update_king(x, y)
                         elif type(self.board[x][y]) is Queen:  
                             self.board[x][y].available_coordinates.clear() 
                             self.update_rook(x, y)
                             self.update_bishop(x, y)
-    
+        
     def move_piece(self, x1, y1, x2, y2):
         def move(x1, y1, x2, y2):
             self.board[x1][y1].move(x2, y2)
@@ -432,31 +440,53 @@ class Game_board:
                     return True
             return False
 
-    def check_castle(self, piece : King):
+    def check_check(self, color : str):
+        white_k_x = self.white_king.coordinate.x 
+        white_k_y = self.white_king.coordinate.y
+
+        black_k_x = self.black_king.coordinate.x 
+        black_k_y = self.black_king.coordinate.y
+
+        def check(color, king_x, king_y):
+            for x in range(8):
+                for y in range(8):
+                    for coord in self.idx_under_attack[x][y][1]:
+                        if coord.x == king_x and coord.y == king_y and self.board[coord.x][coord.y].color != color:
+                            return True
+                            # in check
+            return False
+        
+        if color == "white":
+            check("white", white_k_x, white_k_y)
+        else:
+            check("black", black_k_x, black_k_y)
+
+
+    def check_castle(self, king : King):
         # The king and rook involved in castling must not have previously moved;
-        if piece.color == "black" and piece.moved == False:
+        if king.color == "black" and king.moved == False:
             # left
             def check_black_left ():
                 for i in range(1,4):
-                    if self.board[piece.coordinate.x-i][0] != 0:
+                    if self.board[king.coordinate.x-i][0] != 0:
                         return False
                 for j in range(5):
-                    for cord in self.color_index[piece.coordinate.x-j][0][1]:
+                    for cord in self.idx_under_attack[king.coordinate.x-j][0][1]:
                         if self.board[cord.x][cord.y].color == "white":
                             return False
-                rook = self.board[piece.coordinate.x-4][0]
+                rook = self.board[king.coordinate.x-4][0]
                 if isinstance(rook, Rook) and rook.color == "black" and rook.moved == False:
                     return True
             
             def check_black_right():
                 for i in range(1,3):
-                    if self.board[piece.coordinate.x+i][0] != 0:
+                    if self.board[king.coordinate.x+i][0] != 0:
                         return False
                 for j in range(4):
-                    for cord in self.color_index[piece.coordinate.x+j][0][1]:
+                    for cord in self.idx_under_attack[king.coordinate.x+j][0][1]:
                         if self.board[cord.x][cord.y].color == "white":
                             return False
-                rook = self.board[piece.coordinate.x+3][0]
+                rook = self.board[king.coordinate.x+3][0]
                 if isinstance(rook, Rook) and rook.color == "black" and rook.moved == False:
                     return True
             left = check_black_left()
@@ -464,29 +494,29 @@ class Game_board:
             return left or right
             
                 
-        if piece.color == "white" and piece.moved == False and self.castle_w == False:
+        if king.color == "white" and king.moved == False and self.castle_w == False:
             
             def check_white_left ():
                 for i in range(1,4):
-                    if self.board[piece.coordinate.x-i][7] != 0:
+                    if self.board[king.coordinate.x-i][7] != 0:
                         return False
                 for j in range(5):
-                    for cord in self.color_index[piece.coordinate.x-j][7][1]:
+                    for cord in self.idxunder_attack[king.coordinate.x-j][7][1]:
                         if self.board[cord.x][cord.y].color != "black":
                             return False
-                rook = self.board[piece.coordinate.x-4][7]
+                rook = self.board[king.coordinate.x-4][7]
                 if isinstance(rook, Rook) and rook.color == "white"  and rook.moved == False:
                     return True
 
             def check_white_right():
                 for i in range(1,3):
-                    if self.board[piece.coordinate.x+i][7] != 0:
+                    if self.board[king.coordinate.x+i][7] != 0:
                         return False
                 for j in range(4):
-                    for cord in self.color_index[piece.coordinate.x+j][7][1]:
+                    for cord in self.idxunder_attack[king.coordinate.x+j][7][1]:
                         if self.board[cord.x][cord.y].color == "black":
                             return False
-                rook = self.board[piece.coordinate.x+3][7]
+                rook = self.board[king.coordinate.x+3][7]
                 if isinstance(rook, Rook) and rook.color == "white" and rook.moved == False:
                     return True
             

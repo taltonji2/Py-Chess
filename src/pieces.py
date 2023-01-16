@@ -44,7 +44,6 @@ class Rook(Piece):
     def __init__(self, color, coordinate) -> None:
         super().__init__(color, coordinate)
 
-
 class Knight(Piece):
     name = 'knight'
     letter = 'k'
@@ -52,8 +51,6 @@ class Knight(Piece):
     def __init__(self, color, coordinate) -> None:
         super().__init__(color, coordinate)
     
-            
-
 class Bishop(Piece):
     name = 'bishop'
     letter = 'b'
@@ -61,14 +58,12 @@ class Bishop(Piece):
     def __init__(self, color, coordinate) -> None:
         super().__init__(color, coordinate)
     
-        
 class Queen(Piece):
     name = 'queen'
     letter = 'q'
 
     def __init__(self, color, coordinate) -> None:
         super().__init__(color, coordinate)
-
     
 class King(Piece):
     name = 'king'
