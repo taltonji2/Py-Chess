@@ -7,7 +7,7 @@ class Game_board:
     active_player : str = 'white'
     white_king : Piece = None
     black_king : Piece = None
-    temp_piece : Piece = None
+    last_moved_piece : Piece = None
     check_w : bool = False
     check_b : bool = False
     castle_w : bool = False
@@ -440,7 +440,7 @@ class Game_board:
                     return True
             return False
 
-    def check_check(self, color : str):
+    def check_check_and_check_mate(self, color : str):
         white_k_x = self.white_king.coordinate.x 
         white_k_y = self.white_king.coordinate.y
 
@@ -448,18 +448,30 @@ class Game_board:
         black_k_y = self.black_king.coordinate.y
 
         def check(color, king_x, king_y):
-            for x in range(8):
-                for y in range(8):
-                    for coord in self.idx_under_attack[x][y][1]:
-                        if coord.x == king_x and coord.y == king_y and self.board[coord.x][coord.y].color != color:
-                            return True
-                            # in check
+            for coord in self.idx_under_attack[king_x][king_y][1]:
+                if self.board[coord.x][coord.y].color != color:
+                    return True #check
+            return False
+
+        def check_mate(color, king_x, king_y):
+            move_count = len(self.board[king_x][king_y].available_coordinates)
+            check_mate = True
+            for available_move in self.board[king_x][king_y].available_coordinates:
+                for attacker in self.idx_under_attack[available_move.x][available_move.y][1]:
+                    if self.board[attacker.x][attacker.y].color != color:
+                        move_count -= 1
+            
+            if move_count == 0:
+                return True
+
             return False
         
         if color == "white":
             check("white", white_k_x, white_k_y)
+            check_mate("white", white_k_x, white_k_y)
         else:
             check("black", black_k_x, black_k_y)
+            check_mate("black", black_k_x, black_k_y)
 
 
     def check_castle(self, king : King):
